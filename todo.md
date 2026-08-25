@@ -33,3 +33,6 @@
 - [x] Replace the repeated events hero artwork with the designated second brochure image and differentiate the events-page fantasy treatment.
 - [x] Incorporate the key fantasy and image direction from brochure pages 5 to 8 into public page compositions.
 - [x] Validate the refined logo, contrast, CTA hierarchy, events imagery, and responsive layouts before saving the next checkpoint.
+- [x] Add visible, polished hover and keyboard-focus states to footer social links.
+- [x] Update the footer purpose statement with “You’re Created to Create”.
+- [x] Verify the refreshed footer across themes and viewport sizes before saving the checkpoint.
