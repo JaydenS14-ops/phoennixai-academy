@@ -9,6 +9,7 @@ import CourseCatalog from "./pages/CourseCatalog";
 import Intake from "./pages/Intake";
 import Admin from "./pages/Admin";
 import RiseToCapital from "./pages/RiseToCapital";
+import Curriculum from "./pages/Curriculum";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -19,6 +20,7 @@ function Router() {
       <Route path={"/apply"} component={Intake} />
       <Route path={"/admin"} component={Admin} />
       <Route path={"/rise-to-capital"} component={RiseToCapital} />
+      <Route path={"/curriculum"} component={Curriculum} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

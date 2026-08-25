@@ -140,6 +140,9 @@
   .grain::after { content: ""; pointer-events: none; position: absolute; inset: 0; opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.9'/%3E%3C/svg%3E"); }
   .brand-grid { background-image: linear-gradient(rgba(201, 200, 119, .11) 1px, transparent 1px), linear-gradient(90deg, rgba(201, 200, 119, .11) 1px, transparent 1px); background-size: 54px 54px; mask-image: linear-gradient(to bottom, rgba(0,0,0,.86), transparent 92%); }
   .phoenix-grid { background-image: linear-gradient(rgba(66, 180, 231, .12) 1px, transparent 1px), linear-gradient(90deg, rgba(66, 180, 231, .12) 1px, transparent 1px); background-size: 54px 54px; mask-image: radial-gradient(circle at center, black, transparent 72%); }
+  .partner-marquee { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+  .partner-rail { display: flex; width: max-content; gap: .75rem; animation: partner-drift 32s linear infinite; }
+  .partner-marquee:hover .partner-rail { animation-play-state: paused; }
   .academy-select { border: 1px solid rgba(85, 105, 112, .35); background-color: #fff; color: #1F2426; box-shadow: 0 1px 2px rgba(31, 36, 38, .06); }
   .academy-select:focus-visible { border-color: #ABA944; box-shadow: 0 0 0 3px rgba(171, 169, 68, .28); }
   .academy-select option { background-color: #fff; color: #1F2426; }
@@ -153,5 +156,6 @@
   .reveal-delay-2 { opacity: 0; transform: translateY(20px); animation: reveal-in .8s .22s cubic-bezier(.23,1,.32,1) forwards; }
   @keyframes reveal-in { to { opacity: 1; transform: translateY(0); } }
   @keyframes orbital-drift { 0%, 100% { transform: translate3d(0,0,0) rotate(0); } 50% { transform: translate3d(-10px,14px,0) rotate(12deg); } }
-  @media (prefers-reduced-motion: reduce) { .orbital, .reveal, .reveal-delay, .reveal-delay-2 { animation: none; opacity: 1; transform: none; } }
+  @keyframes partner-drift { to { transform: translateX(calc(-50% - .375rem)); } }
+  @media (prefers-reduced-motion: reduce) { .orbital, .reveal, .reveal-delay, .reveal-delay-2, .partner-rail { animation: none; opacity: 1; transform: none; } }
 }

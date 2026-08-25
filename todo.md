@@ -48,3 +48,13 @@
 - [x] Add Rise to Capital navigation and conversion links to the public academy experience, including the mobile navigation menu.
 - [x] Test the password visibility control, Rise to Capital route, and responsive partner-programme presentation before saving a checkpoint.
 - [x] Remove the newly introduced directional icon from the Rise to Capital enquiry CTA to preserve the approved clean button hierarchy.
+- [x] Add an animated, accessible partner showcase strip with placeholder partners and the Rise to Capital partnership mark.
+- [x] Update the public mandate wording to replace “not servants” with “builders.”
+- [x] Update the Rise to Capital investor-network wording from “may be introduced” to “will be introduced,” while retaining clear no-investment-guarantee language.
+- [x] Update all PhoennixAI Academy certification positioning to accurately state that the academy’s certifications are CPD approved.
+- [x] Implement an expandable public 15-module Rise to Capital curriculum interaction using the approved module titles.
+- [x] Create a public PhoennixAI curriculum specification that includes the Academy and PhoennixAI Agency technology and automation services.
+- [x] Reposition the floating back-to-top control and visitor chat launcher so they do not obscure one another.
+- [x] Audit and refine the customer journey for clarity, conversion, responsive usability, and refined product delight.
+- [x] Validate the partner strip, curriculum framework, copy corrections, and floating controls before saving the next checkpoint.
+- [ ] Replace the current R|C placeholder mark in the partnership strip with the official Rise to Capital logo when the approved logo file is supplied.
