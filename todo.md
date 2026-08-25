@@ -57,7 +57,7 @@
 - [x] Reposition the floating back-to-top control and visitor chat launcher so they do not obscure one another.
 - [x] Audit and refine the customer journey for clarity, conversion, responsive usability, and refined product delight.
 - [x] Validate the partner strip, curriculum framework, copy corrections, and floating controls before saving the next checkpoint.
-- [ ] Replace the current R|C placeholder mark in the partnership strip with the official Rise to Capital logo when the approved logo file is supplied.
+- [x] Retain the current R|C partnership-strip mark as the approved temporary placeholder until official partner logos are supplied in a future update.
 - [x] Securely replace the Admin Management Centre username and password with user-provided values and validate sign-in behavior.
 - [x] Update the Rise to Capital page to name Conquest Capital Advisors as the partner and use the approved partnership narrative.
 - [x] Replace the Rise to Capital module labels and learning outcomes with the exact approved 15-module sequence.
