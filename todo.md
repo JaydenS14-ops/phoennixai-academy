@@ -58,3 +58,7 @@
 - [x] Audit and refine the customer journey for clarity, conversion, responsive usability, and refined product delight.
 - [x] Validate the partner strip, curriculum framework, copy corrections, and floating controls before saving the next checkpoint.
 - [ ] Replace the current R|C placeholder mark in the partnership strip with the official Rise to Capital logo when the approved logo file is supplied.
+- [x] Securely replace the Admin Management Centre username and password with user-provided values and validate sign-in behavior.
+- [x] Update the Rise to Capital page to name Conquest Capital Advisors as the partner and use the approved partnership narrative.
+- [x] Replace the Rise to Capital module labels and learning outcomes with the exact approved 15-module sequence.
+- [x] Verify the revised partner curriculum and secure administrator access before saving the checkpoint.
