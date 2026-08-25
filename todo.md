@@ -36,3 +36,8 @@
 - [x] Add visible, polished hover and keyboard-focus states to footer social links.
 - [x] Update the footer purpose statement with “You’re Created to Create”.
 - [x] Verify the refreshed footer across themes and viewport sizes before saving the checkpoint.
+- [x] Add a protected Admin entry link in the public header for convenient access to the secure `/admin` screen.
+- [x] Update the public mandate ending to “owners, you’re created to create.”
+- [x] Increase the copyright line’s footer type size and contrast.
+- [x] Add an accessible floating back-to-top arrow that appears after visitors scroll.
+- [x] Verify the protected Admin Management Centre entry and the refined public controls before saving the checkpoint.

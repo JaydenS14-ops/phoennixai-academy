@@ -145,6 +145,8 @@
   .academy-select option { background-color: #fff; color: #1F2426; }
   .dark .academy-select { border-color: rgba(255,255,255,.24); background-color: #172231; color: #F7F6F2; }
   .dark .academy-select option { background-color: #172231; color: #F7F6F2; }
+  footer > .container:last-child { font-size: .68rem !important; letter-spacing: .1em !important; color: #607178 !important; }
+  .dark footer > .container:last-child { color: #B3C1C5 !important; }
   .orbital { animation: orbital-drift 12s ease-in-out infinite; }
   .reveal { opacity: 0; transform: translateY(20px); animation: reveal-in .8s cubic-bezier(.23,1,.32,1) forwards; }
   .reveal-delay { opacity: 0; transform: translateY(20px); animation: reveal-in .8s .13s cubic-bezier(.23,1,.32,1) forwards; }
