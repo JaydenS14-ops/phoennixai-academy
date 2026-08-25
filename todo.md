@@ -41,3 +41,10 @@
 - [x] Increase the copyright line’s footer type size and contrast.
 - [x] Add an accessible floating back-to-top arrow that appears after visitors scroll.
 - [x] Verify the protected Admin Management Centre entry and the refined public controls before saving the checkpoint.
+- [x] Add an accessible eye / eye-off control that toggles password visibility on the protected Admin sign-in screen.
+- [x] Create a distinct Rise to Capital partner-programme page with a high-level public curriculum and clear enquiry route.
+- [x] Present Junior Tech Explorer, Certified Professional, and Founder & Venture Graduate certification pathways accurately.
+- [x] Describe potential CPD and investor-network progression conditionally until accreditation and partner terms are confirmed.
+- [x] Add Rise to Capital navigation and conversion links to the public academy experience, including the mobile navigation menu.
+- [x] Test the password visibility control, Rise to Capital route, and responsive partner-programme presentation before saving a checkpoint.
+- [x] Remove the newly introduced directional icon from the Rise to Capital enquiry CTA to preserve the approved clean button hierarchy.
