@@ -10,10 +10,19 @@
 - [x] Build the protected `/admin` dashboard with conversion metrics and a responsive student-lead schedule table.
 - [x] Add automated tests for lead validation, lead persistence contracts, analytics calculations, and administrative access controls.
 - [x] Test public and administrative flows, including mobile layouts, and capture visual verification screenshots.
-- [ ] Create a final project checkpoint and provide publishing guidance.
+- [x] Create a final project checkpoint and provide publishing guidance.
 - [x] Remove the automatic public Revolut payment redirect; retain payment links as optional, editable course settings managed only within the Admin Management Centre.
 - [x] Build an Admin Management Centre course editor for the academy’s courses, including editable prices and unique optional `REVOLUT_PRO_PAYMENT_LINK` URLs that update the public catalog immediately.
 - [x] Build a site-content editor for the homepage hero and leadership mandate text.
 - [x] Add a dedicated username-and-password sign-in screen and server-side credential verification for `/admin` access.
 - [x] Ensure course prices, payment links, and editable homepage content refresh immediately in open public academy tabs after an Admin Management Centre save.
 - [x] Provide a mobile navigation trigger for switching Admin Management Centre sections on a phone.
+- [x] Remove the remaining em dash characters found in framework comments so the project fully honours the requested punctuation cleanup.
+- [x] Replace the displayed academy title with “Business & Technology Centre” and remove all em dash characters from public and administrative copy.
+- [x] Apply the supplied brand-system direction and brochure photography with a polished, restrained fantasy visual layer.
+- [x] Add premium scroll-triggered transitions and motion that respect reduced-motion preferences.
+- [x] Build a lightweight homepage AI chatbot that answers common questions using approved academy information.
+- [x] Add an Admin Management Centre field for a public Luma event URL and display the linked event on the public website.
+- [x] Add the company address and social-link icon area to the public footer.
+- [x] Correct the visitor-chat response truncation identified during interactive validation and verify a live response renders.
+- [x] Validate the refreshed public pages, chatbot, Admin event control, and responsive motion before saving a final checkpoint.

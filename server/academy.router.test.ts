@@ -2,18 +2,25 @@ import { describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   createStudentLead: vi.fn(),
+  createAcademyEvent: vi.fn(),
+  deleteAcademyEvent: vi.fn(),
   updateAcademyCourse: vi.fn(),
   updateAcademyContent: vi.fn(),
+  answerAcademyQuestion: vi.fn().mockResolvedValue("The Prep School welcomes learners from age 8."),
 }));
 
 vi.mock("./db", () => ({
   createStudentLead: mocks.createStudentLead,
+  createAcademyEvent: mocks.createAcademyEvent,
+  deleteAcademyEvent: mocks.deleteAcademyEvent,
   getAcademyCatalog: vi.fn(),
   getAdminOverview: vi.fn(),
   recordPageView: vi.fn(),
   updateAcademyContent: mocks.updateAcademyContent,
   updateAcademyCourse: mocks.updateAcademyCourse,
 }));
+
+vi.mock("./academyChat", () => ({ answerAcademyQuestion: mocks.answerAcademyQuestion }));
 
 import { academyRouter } from "./routers/academy";
 import { calculateConversionRate } from "./academyMetrics";
@@ -31,26 +38,12 @@ function context(adminSession = false): TrpcContext {
 describe("academy intake and administration contracts", () => {
   it("validates Prep School age before accepting an intake", async () => {
     const caller = academyRouter.createCaller(context());
-    await expect(caller.submitLead({
-      parentName: "Valerie Wilcox",
-      parentEmail: "valerie@example.com",
-      studentName: "Learner One",
-      studentAge: 7,
-      primarySkill: "Software Computing",
-      availability: "Wednesday afternoons",
-    })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(caller.submitLead({ parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 7, primarySkill: "Software Computing", availability: "Wednesday afternoons" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("passes a validated intake to the student-lead persistence helper", async () => {
     const caller = academyRouter.createCaller(context());
-    const lead = {
-      parentName: "Valerie Wilcox",
-      parentEmail: "valerie@example.com",
-      studentName: "Learner One",
-      studentAge: 12,
-      primarySkill: "Software Computing",
-      availability: "Wednesday afternoons and Saturday mornings",
-    };
+    const lead = { parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 12, primarySkill: "Software Computing", availability: "Wednesday afternoons and Saturday mornings" };
     await caller.submitLead(lead);
     expect(mocks.createStudentLead).toHaveBeenCalledWith(lead);
   });
@@ -64,6 +57,24 @@ describe("academy intake and administration contracts", () => {
     const caller = academyRouter.createCaller(context(true));
     await caller.admin.updateCourse({ id: 1, pricePence: 8500, paymentLink: null });
     expect(mocks.updateAcademyCourse).toHaveBeenCalledWith({ id: 1, pricePence: 8500, paymentLink: null });
+  });
+
+  it("restricts Luma event publishing to administrator sessions", async () => {
+    const caller = academyRouter.createCaller(context());
+    await expect(caller.admin.createEvent({ title: "Builder Session", summary: "A project-led event for future builders.", eventDate: "18 September 2026 · 18:00", lumaUrl: "https://lu.ma/builder-session" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("passes a valid public Luma event listing to the persistence helper", async () => {
+    const caller = academyRouter.createCaller(context(true));
+    const event = { title: "Builder Session", summary: "A project-led event for future builders.", eventDate: "18 September 2026 · 18:00", lumaUrl: "https://lu.ma/builder-session" };
+    await caller.admin.createEvent(event);
+    expect(mocks.createAcademyEvent).toHaveBeenCalledWith(event);
+  });
+
+  it("passes concise visitor questions through to the chatbot response service", async () => {
+    const caller = academyRouter.createCaller(context());
+    await expect(caller.chat({ question: "What age can students start?" })).resolves.toEqual({ answer: "The Prep School welcomes learners from age 8." });
+    expect(mocks.answerAcademyQuestion).toHaveBeenCalledWith("What age can students start?");
   });
 
   it("calculates a one-decimal conversion rate without a divide-by-zero error", () => {

@@ -1,6 +1,8 @@
 import { z } from "zod";
 import {
+  createAcademyEvent,
   createStudentLead,
+  deleteAcademyEvent,
   getAcademyCatalog,
   getAdminOverview,
   recordPageView,
@@ -8,6 +10,7 @@ import {
   updateAcademyCourse,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
+import { answerAcademyQuestion } from "../academyChat";
 
 const leadInput = z.object({
   parentName: z.string().trim().min(2).max(160),
@@ -27,6 +30,9 @@ export const academyRouter = router({
     await createStudentLead(input);
     return { success: true } as const;
   }),
+  chat: publicProcedure
+    .input(z.object({ question: z.string().trim().min(2).max(600) }))
+    .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
     overview: adminProcedure.query(() => getAdminOverview()),
     updateCourse: adminProcedure
@@ -39,5 +45,16 @@ export const academyRouter = router({
     updateContent: adminProcedure
       .input(z.object({ contentKey: z.string().min(1).max(96), contentValue: z.string().trim().min(1).max(10000) }))
       .mutation(({ input }) => updateAcademyContent(input.contentKey, input.contentValue)),
+    createEvent: adminProcedure
+      .input(z.object({
+        title: z.string().trim().min(2).max(180),
+        summary: z.string().trim().min(2).max(2000),
+        eventDate: z.string().trim().min(2).max(96),
+        lumaUrl: z.string().trim().url().max(2000),
+      }))
+      .mutation(({ input }) => createAcademyEvent(input)),
+    deleteEvent: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => deleteAcademyEvent(input.id)),
   }),
 });

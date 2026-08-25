@@ -64,6 +64,17 @@ export const pageViews = mysqlTable("page_views", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const academyEvents = mysqlTable("academy_events", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 180 }).notNull(),
+  summary: text("summary").notNull(),
+  eventDate: varchar("eventDate", { length: 96 }).notNull(),
+  lumaUrl: text("lumaUrl").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export type Course = typeof courses.$inferSelect;
 export type InsertCourse = typeof courses.$inferInsert;
 export type StudentLead = typeof studentLeads.$inferSelect;
+export type AcademyEvent = typeof academyEvents.$inferSelect;

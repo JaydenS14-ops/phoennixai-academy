@@ -1,6 +1,7 @@
 import { asc, count, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  academyEvents,
   courses,
   InsertUser,
   pageViews,
@@ -112,6 +113,11 @@ const academyContent = [
   { contentKey: "hero_title", contentValue: "Building capable futures through business, technology & purpose." },
   { contentKey: "hero_description", contentValue: "Live, project-led learning for children, teens, and adults ready to build with clarity, confidence, and conviction." },
   { contentKey: "mandate", contentValue: "At PhoennixAI, we don't raise followers - we raise leaders and builders. We remind every learner that you're kings, not servants - owners, not labourers." },
+  { contentKey: "footer_address", contentValue: "58 Peregrine Road, Essex, IG6 3SZ" },
+  { contentKey: "social_instagram", contentValue: "" },
+  { contentKey: "social_linkedin", contentValue: "" },
+  { contentKey: "social_x", contentValue: "" },
+  { contentKey: "social_facebook", contentValue: "" },
 ];
 
 async function ensureAcademyDefaults() {
@@ -119,20 +125,25 @@ async function ensureAcademyDefaults() {
   if (!db) throw new Error("Database connection is unavailable");
   const [existingCourse] = await db.select({ id: courses.id }).from(courses).limit(1);
   if (!existingCourse) await db.insert(courses).values(academyCourses);
-  const [existingContent] = await db.select({ id: siteContent.id }).from(siteContent).limit(1);
-  if (!existingContent) await db.insert(siteContent).values(academyContent);
+  for (const content of academyContent) {
+    await db.insert(siteContent).values(content).onDuplicateKeyUpdate({
+      set: { contentKey: content.contentKey },
+    });
+  }
   return db;
 }
 
 export async function getAcademyCatalog() {
   const db = await ensureAcademyDefaults();
-  const [courseList, contentList] = await Promise.all([
+  const [courseList, contentList, eventList] = await Promise.all([
     db.select().from(courses).orderBy(asc(courses.sortOrder)),
     db.select().from(siteContent),
+    db.select().from(academyEvents).orderBy(desc(academyEvents.createdAt)),
   ]);
   return {
     courses: courseList,
     content: Object.fromEntries(contentList.map(item => [item.contentKey, item.contentValue])),
+    events: eventList,
   };
 }
 
@@ -188,4 +199,19 @@ export async function updateAcademyContent(contentKey: string, contentValue: str
   await db.insert(siteContent).values({ contentKey, contentValue }).onDuplicateKeyUpdate({
     set: { contentValue },
   });
+}
+
+export async function createAcademyEvent(input: {
+  title: string;
+  summary: string;
+  eventDate: string;
+  lumaUrl: string;
+}) {
+  const db = await ensureAcademyDefaults();
+  await db.insert(academyEvents).values(input);
+}
+
+export async function deleteAcademyEvent(id: number) {
+  const db = await ensureAcademyDefaults();
+  await db.delete(academyEvents).where(eq(academyEvents.id, id));
 }
