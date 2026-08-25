@@ -26,3 +26,10 @@
 - [x] Add the company address and social-link icon area to the public footer.
 - [x] Correct the visitor-chat response truncation identified during interactive validation and verify a live response renders.
 - [x] Validate the refreshed public pages, chatbot, Admin event control, and responsive motion before saving a final checkpoint.
+- [x] Replace the header and footer mark with a circular treatment of the supplied phoenix logo and update its subline to “Academy”.
+- [x] Replace generic sparkle decorations with a consistently used blue phoenix-flame signature motif.
+- [x] Simplify CTA buttons by removing repeated arrow icons and preserve a restrained, professional action hierarchy.
+- [x] Strengthen programme-card, form-field, dropdown, progress-bar, and “Student intake” contrast using the approved brand green.
+- [x] Replace the repeated events hero artwork with the designated second brochure image and differentiate the events-page fantasy treatment.
+- [x] Incorporate the key fantasy and image direction from brochure pages 5 to 8 into public page compositions.
+- [x] Validate the refined logo, contrast, CTA hierarchy, events imagery, and responsive layouts before saving the next checkpoint.
