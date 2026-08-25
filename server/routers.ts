@@ -1,7 +1,17 @@
 import { COOKIE_NAME } from "@shared/const";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import {
+  ADMIN_SESSION_COOKIE,
+  createAdminSessionToken,
+  getAdminCookieOptions,
+  validateAdminCredentials,
+} from "./adminAuth";
 import { getSessionCookieOptions } from "./_core/cookies";
+import { ENV } from "./_core/env";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, router } from "./_core/trpc";
+import { adminProcedure, publicProcedure, router } from "./_core/trpc";
+import { academyRouter } from "./routers/academy";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -16,6 +26,42 @@ export const appRouter = router({
       } as const;
     }),
   }),
+  admin: router({
+    login: publicProcedure
+      .input(
+        z.object({
+          username: z.string().min(1).max(128),
+          password: z.string().min(1).max(512),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        if (!validateAdminCredentials(input.username, input.password)) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "The username or password is incorrect.",
+          });
+        }
+        const token = await createAdminSessionToken();
+        ctx.res.cookie(
+          ADMIN_SESSION_COOKIE,
+          token,
+          getAdminCookieOptions(ENV.isProduction),
+        );
+        return { success: true } as const;
+      }),
+    status: publicProcedure.query(({ ctx }) => ({
+      authenticated: Boolean(ctx.adminSession),
+    })),
+    logout: publicProcedure.mutation(({ ctx }) => {
+      ctx.res.clearCookie(ADMIN_SESSION_COOKIE, {
+        ...getAdminCookieOptions(ENV.isProduction),
+        maxAge: -1,
+      });
+      return { success: true } as const;
+    }),
+    privateCheck: adminProcedure.query(() => ({ ok: true })),
+  }),
+  academy: academyRouter,
 
   // TODO: add feature routers here, e.g.
   // todo: router({

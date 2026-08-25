@@ -25,4 +25,45 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+export const courses = mysqlTable("courses", {
+  id: int("id").autoincrement().primaryKey(),
+  slug: varchar("slug", { length: 96 }).notNull().unique(),
+  title: varchar("title", { length: 160 }).notNull(),
+  description: text("description").notNull(),
+  duration: varchar("duration", { length: 64 }).notNull(),
+  pricePence: int("pricePence").notNull(),
+  paymentLink: text("paymentLink"),
+  featured: int("featured").notNull().default(0),
+  sortOrder: int("sortOrder").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const siteContent = mysqlTable("site_content", {
+  id: int("id").autoincrement().primaryKey(),
+  contentKey: varchar("contentKey", { length: 96 }).notNull().unique(),
+  contentValue: text("contentValue").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export const studentLeads = mysqlTable("student_leads", {
+  id: int("id").autoincrement().primaryKey(),
+  parentName: varchar("parentName", { length: 160 }).notNull(),
+  parentEmail: varchar("parentEmail", { length: 320 }).notNull(),
+  studentName: varchar("studentName", { length: 160 }).notNull(),
+  studentAge: int("studentAge").notNull(),
+  primarySkill: varchar("primarySkill", { length: 160 }).notNull(),
+  availability: text("availability").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const pageViews = mysqlTable("page_views", {
+  id: int("id").autoincrement().primaryKey(),
+  path: varchar("path", { length: 255 }).notNull(),
+  visitorKey: varchar("visitorKey", { length: 128 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type Course = typeof courses.$inferSelect;
+export type InsertCourse = typeof courses.$inferInsert;
+export type StudentLead = typeof studentLeads.$inferSelect;

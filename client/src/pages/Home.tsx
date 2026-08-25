@@ -1,33 +1,41 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+import { useEffect } from "react";
+import { ArrowRight, ArrowUpRight, BookOpen, BrainCircuit, Compass, GraduationCap, ShieldCheck, Sparkles } from "lucide-react";
+import { Link } from "wouter";
+import AcademyHeader from "@/components/AcademyHeader";
+import CourseCard from "@/components/CourseCard";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { trpc } from "@/lib/trpc";
+import { useLiveCatalog } from "@/hooks/useLiveCatalog";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
+function usePageView(path: string) {
+  const track = trpc.academy.trackPageView.useMutation();
+  useEffect(() => {
+    const key = "phoennixai-visitor";
+    const visitorKey = sessionStorage.getItem(key) ?? crypto.randomUUID();
+    sessionStorage.setItem(key, visitorKey);
+    track.mutate({ path, visitorKey });
+  }, [path]);
+}
+
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
+  useLiveCatalog();
+  const { data } = trpc.academy.catalog.useQuery(undefined, { refetchInterval: 15000 });
+  usePageView("/");
+  const content = data?.content ?? {};
+  const courses = data?.courses ?? [];
+  const featured = courses.find(course => course.featured) ?? courses[0];
 
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
+  return <div className="min-h-screen overflow-hidden"><AcademyHeader />
+    <main>
+      <section className="grain relative isolate overflow-hidden bg-[#07101d] py-18 text-white sm:py-24 lg:py-30"><div className="tech-grid absolute inset-0 text-cyan-100/40" /><div className="absolute -right-32 top-6 h-96 w-96 rounded-full bg-cyan-400/20 blur-[110px]" /><div className="absolute -bottom-40 left-[20%] h-96 w-96 rounded-full bg-blue-600/25 blur-[120px]" />
+        <div className="container relative grid items-end gap-12 lg:grid-cols-[1.1fr_0.9fr]"><div className="max-w-3xl"><div className="mb-7 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-cyan-200"><span className="h-px w-8 bg-cyan-300" />{content.hero_eyebrow ?? "Purpose-led skills for tomorrow’s builders"}</div><p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">PhoennixAI Academy: Business &amp; Technology Centre</p><h1 className="max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.055em] text-balance sm:text-6xl lg:text-7xl">{content.hero_title ?? "Building capable futures through business, technology & purpose."}</h1><p className="mt-7 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">{content.hero_description ?? "Live, project-led learning for children, teens, and adults ready to build with clarity, confidence, and conviction."}</p><div className="mt-9 flex flex-wrap gap-3"><Button asChild size="lg" className="rounded-xl bg-cyan-300 px-5 font-semibold text-slate-950 hover:bg-cyan-200"><Link href="/apply">Begin an enquiry <ArrowUpRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="rounded-xl border-white/25 bg-white/5 text-white hover:bg-white/10 hover:text-white"><Link href="/courses">Explore programmes <ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div></div>
+          <div className="rounded-[2rem] border border-white/10 bg-white/5 p-2 shadow-2xl shadow-black/30 backdrop-blur-md"><div className="rounded-[1.6rem] border border-white/10 bg-slate-950/40 p-6 sm:p-8"><div className="flex items-center justify-between"><p className="text-xs font-semibold uppercase tracking-[0.15em] text-cyan-200">The academy principle</p><Sparkles className="h-5 w-5 text-cyan-300" /></div><p className="mt-10 text-2xl font-medium leading-tight tracking-tight text-balance sm:text-3xl">"Skills that become solutions. Purpose that becomes legacy."</p><div className="mt-12 grid grid-cols-3 border-t border-white/10 pt-5 text-center"><div><p className="text-xl font-bold text-cyan-200">8+</p><p className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">Prep school</p></div><div className="border-x border-white/10"><p className="text-xl font-bold text-cyan-200">6–8</p><p className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">Months guided</p></div><div><p className="text-xl font-bold text-cyan-200">Live</p><p className="mt-1 text-[10px] uppercase tracking-wider text-slate-400">Mentorship</p></div></div></div></div>
+        </div>
+      </section>
+      <section id="mandate" className="bg-background py-20 sm:py-28"><div className="container grid gap-10 lg:grid-cols-[0.8fr_1.2fr]"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">Our mandate</p><h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">More than education.</h2><p className="mt-4 max-w-md leading-7 text-muted-foreground">An environment where gifts are discovered, activated, and applied to meaningful work.</p></div><blockquote className="border-l-2 border-cyan-400 pl-7 text-2xl font-medium leading-snug tracking-tight text-balance sm:text-3xl">“{content.mandate ?? "At PhoennixAI, we don't raise followers - we raise leaders and builders. We remind every learner that you're kings, not servants - owners, not labourers."}”</blockquote></div></section>
+      <section className="bg-slate-100 py-20 dark:bg-white/[0.035] sm:py-28"><div className="container"><div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-600 dark:text-cyan-300">Learn by building</p><h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">Practical pathways for every stage.</h2></div><Button asChild variant="outline" className="w-fit rounded-xl"><Link href="/courses">View all programmes <ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div><div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{courses.filter(course => !course.featured).slice(0, 3).map(course => <div key={course.id} className="rounded-2xl border border-border bg-background p-6"><GraduationCap className="h-5 w-5 text-cyan-600 dark:text-cyan-300" /><h3 className="mt-8 text-lg font-semibold">{course.title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{course.description}</p></div>)}</div></div></section>
+      {featured && <section className="py-20 sm:py-28"><div className="container"><div className="rounded-[2rem] bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-600 p-px shadow-2xl shadow-blue-500/20"><div className="grid gap-8 rounded-[1.95rem] bg-[#091120] p-7 text-white sm:p-10 lg:grid-cols-[0.75fr_1.25fr] lg:p-12"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-cyan-200">Designed for households</p><h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl">A practical start, without the pressure.</h2><p className="mt-4 max-w-sm leading-7 text-slate-300">Our family pathway makes structured learning more accessible while allowing families to retain flexibility.</p></div><CourseCard course={featured} /></div></div></div></section>}
+      <section className="border-t border-border py-18"><div className="container grid gap-8 md:grid-cols-3">{[[BookOpen, "Project-led learning", "Concepts become portfolio-ready outcomes through real work."],[BrainCircuit, "AI-augmented creativity", "Modern tools help learners move from ideas to execution."],[ShieldCheck, "Values-led mentorship", "Excellence, integrity, and impact shape the way we learn."]].map(([Icon, title, description]) => { const IconComponent = Icon as typeof BookOpen; return <div key={title as string} className="flex gap-4"><div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-cyan-400/10 text-cyan-600 dark:text-cyan-300"><IconComponent className="h-5 w-5" /></div><div><h3 className="font-semibold">{title as string}</h3><p className="mt-1 text-sm leading-6 text-muted-foreground">{description as string}</p></div></div>})}</div></section>
+    </main><footer className="bg-[#07101d] py-12 text-slate-300"><div className="container flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><div><p className="text-lg font-semibold text-white">PhoennixAI Academy</p><p className="mt-1 text-sm text-slate-400">Business & Technology Centre</p></div><div className="flex gap-5 text-sm"><Link href="/courses" className="hover:text-cyan-200">Courses</Link><Link href="/apply" className="hover:text-cyan-200">Enquire</Link><a href="mailto:info@phoennixai.com" className="hover:text-cyan-200">Contact</a></div></div></footer>
+  </div>;
 }

@@ -1,0 +1,19 @@
+# Project TODO
+
+- [x] Review the supplied academy brochure and extract the core public-facing content.
+- [x] Create the polished, mobile-responsive PhoennixAI Academy brochure homepage with the required leadership mandate.
+- [x] Build the course catalog and pricing experience for six monthly courses and the highlighted £99/month Multi-Disciplinary Household Family Bundle.
+- [x] Create a validated, accessible multi-step parent and student intake form with the requested fields and age guidance.
+- [x] Create and migrate the internal `student_leads` table for securely stored intake submissions.
+- [x] Implement secure backend procedures for page-view tracking, lead capture, editable course/site content, and admin-managed payment-link storage.
+- [x] Superseded by the user’s Admin Management Centre requirement: the global `REVOLUT_PRO_PAYMENT_LINK` environment configuration is not used for automatic redirects.
+- [x] Build the protected `/admin` dashboard with conversion metrics and a responsive student-lead schedule table.
+- [x] Add automated tests for lead validation, lead persistence contracts, analytics calculations, and administrative access controls.
+- [x] Test public and administrative flows, including mobile layouts, and capture visual verification screenshots.
+- [ ] Create a final project checkpoint and provide publishing guidance.
+- [x] Remove the automatic public Revolut payment redirect; retain payment links as optional, editable course settings managed only within the Admin Management Centre.
+- [x] Build an Admin Management Centre course editor for the academy’s courses, including editable prices and unique optional `REVOLUT_PRO_PAYMENT_LINK` URLs that update the public catalog immediately.
+- [x] Build a site-content editor for the homepage hero and leadership mandate text.
+- [x] Add a dedicated username-and-password sign-in screen and server-side credential verification for `/admin` access.
+- [x] Ensure course prices, payment links, and editable homepage content refresh immediately in open public academy tabs after an Admin Management Centre save.
+- [x] Provide a mobile navigation trigger for switching Admin Management Centre sections on a phone.
