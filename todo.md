@@ -80,5 +80,6 @@
 - [x] Render published archive moments as authentic photo-backed cards in the public In Motion bento page.
 - [x] Validate admin course editing, full content management, secure archive publishing, and responsive public archive updates before saving a checkpoint.
 - [x] Add Admin-editable Rise to Capital partner narrative fields and bind the public partnership page to them.
-- [ ] Browser-test authenticated course edits, confirmed course removal, archive image upload, archive publishing, and public archive refresh.
-- [ ] Save a new checkpoint after the remaining CMS validation passes.
+- [x] Browser-test authenticated course edits, confirmed course removal, archive image upload, archive publishing, and public archive refresh.
+- [x] Save a new checkpoint after the remaining CMS validation passes.
+- [x] Save a final checkpoint after the authenticated Admin CMS workflow is verified.
