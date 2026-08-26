@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  createAcademyCourse,
   createAcademyEvent,
   createStudentLead,
   deleteAcademyEvent,
@@ -35,6 +36,16 @@ export const academyRouter = router({
     .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
     overview: adminProcedure.query(() => getAdminOverview()),
+    createCourse: adminProcedure
+      .input(z.object({
+        title: z.string().trim().min(2).max(180),
+        description: z.string().trim().min(10).max(2000),
+        duration: z.string().trim().min(2).max(96),
+        pricePence: z.number().int().min(0).max(10000000),
+        paymentLink: z.string().trim().url().nullable(),
+        featured: z.boolean(),
+      }))
+      .mutation(({ input }) => createAcademyCourse(input)),
     updateCourse: adminProcedure
       .input(z.object({
         id: z.number().int().positive(),

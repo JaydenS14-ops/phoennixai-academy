@@ -105,7 +105,7 @@ const academyCourses = [
   { slug: "content-creation", title: "Content Creation & Social Media", description: "Create purposeful content and understand how to communicate with clarity across digital platforms.", duration: "6–8 months", pricePence: 6500, featured: 0, sortOrder: 4 },
   { slug: "digital-marketing", title: "Digital Marketing", description: "Learn practical digital marketing, audience insight, and campaign strategy for meaningful growth.", duration: "6–8 months", pricePence: 6500, featured: 0, sortOrder: 5 },
   { slug: "ai-automation", title: "AI Automation", description: "Use AI tools responsibly to streamline work, solve problems, and turn concepts into operational systems.", duration: "6–8 months", pricePence: 12000, featured: 0, sortOrder: 6 },
-  { slug: "family-bundle", title: "Multi-Disciplinary Household Family Bundle", description: "A flexible, low-risk household pathway that brings practical technology and creative learning together.", duration: "Flexible monthly", pricePence: 9900, featured: 1, sortOrder: 0 },
+  { slug: "family-bundle", title: "Multi-Disciplinary Family Bundle", description: "A flexible, low-risk family pathway that brings practical technology and creative learning together.", duration: "Flexible monthly", pricePence: 9900, featured: 1, sortOrder: 0 },
 ];
 
 const academyContent = [
@@ -192,6 +192,29 @@ export async function updateAcademyCourse(input: {
     pricePence: input.pricePence,
     paymentLink: input.paymentLink,
   }).where(eq(courses.id, input.id));
+}
+
+export async function createAcademyCourse(input: {
+  title: string;
+  description: string;
+  duration: string;
+  pricePence: number;
+  paymentLink: string | null;
+  featured: boolean;
+}) {
+  const db = await ensureAcademyDefaults();
+  const [lastCourse] = await db.select({ sortOrder: courses.sortOrder }).from(courses).orderBy(desc(courses.sortOrder)).limit(1);
+  const slugBase = input.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "academy-course";
+  await db.insert(courses).values({
+    slug: `${slugBase}-${Date.now().toString(36)}`,
+    title: input.title,
+    description: input.description,
+    duration: input.duration,
+    pricePence: input.pricePence,
+    paymentLink: input.paymentLink,
+    featured: input.featured ? 1 : 0,
+    sortOrder: (lastCourse?.sortOrder ?? 0) + 1,
+  });
 }
 
 export async function updateAcademyContent(contentKey: string, contentValue: string) {

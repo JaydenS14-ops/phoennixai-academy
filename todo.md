@@ -62,3 +62,13 @@
 - [x] Update the Rise to Capital page to name Conquest Capital Advisors as the partner and use the approved partnership narrative.
 - [x] Replace the Rise to Capital module labels and learning outcomes with the exact approved 15-module sequence.
 - [x] Verify the revised partner curriculum and secure administrator access before saving the checkpoint.
+- [x] Add the supplied circular PhoennixAI logo to the Admin Management Centre navigation.
+- [x] Increase sidebar and sign-out contrast so all administrator navigation controls remain readable in light and dark presentations.
+- [x] Add an Admin course-creation flow so new courses can be added without code changes.
+- [x] Add a secure administrator-only CSV export for student leads and a summary export for dashboard analytics.
+- [x] Validate the branded, high-contrast Admin workflow, course creation, and secure export behavior before saving a checkpoint.
+- [x] Remove “Household” from all public Multi-Disciplinary Family Bundle copy and management labels.
+- [x] Create the bento-style “In Motion” Builder Archive for community moments, events, founder activity, talks, retreats, and alumni milestones.
+- [x] Add “In Motion” to the responsive public navigation and create a clear route into the archive.
+- [x] Build the archive with scalable placeholders ready for future authentic event photography and editorial captions.
+- [x] Validate the Family Bundle naming and responsive community archive before saving a checkpoint.

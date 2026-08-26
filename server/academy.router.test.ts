@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
   createStudentLead: vi.fn(),
+  createAcademyCourse: vi.fn(),
   createAcademyEvent: vi.fn(),
   deleteAcademyEvent: vi.fn(),
   updateAcademyCourse: vi.fn(),
@@ -11,6 +12,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("./db", () => ({
   createStudentLead: mocks.createStudentLead,
+  createAcademyCourse: mocks.createAcademyCourse,
   createAcademyEvent: mocks.createAcademyEvent,
   deleteAcademyEvent: mocks.deleteAcademyEvent,
   getAcademyCatalog: vi.fn(),
@@ -57,6 +59,18 @@ describe("academy intake and administration contracts", () => {
     const caller = academyRouter.createCaller(context(true));
     await caller.admin.updateCourse({ id: 1, pricePence: 8500, paymentLink: null });
     expect(mocks.updateAcademyCourse).toHaveBeenCalledWith({ id: 1, pricePence: 8500, paymentLink: null });
+  });
+
+  it("restricts course creation to administrator sessions", async () => {
+    const caller = academyRouter.createCaller(context());
+    await expect(caller.admin.createCourse({ title: "Founder Finance", description: "Practical commercial finance foundations for future venture builders.", duration: "5 months", pricePence: 12500, paymentLink: null, featured: false })).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("passes a valid new course to the persistence helper", async () => {
+    const caller = academyRouter.createCaller(context(true));
+    const course = { title: "Founder Finance", description: "Practical commercial finance foundations for future venture builders.", duration: "5 months", pricePence: 12500, paymentLink: null, featured: false };
+    await caller.admin.createCourse(course);
+    expect(mocks.createAcademyCourse).toHaveBeenCalledWith(course);
   });
 
   it("restricts Luma event publishing to administrator sessions", async () => {

@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
-const skills = ["Product Design (UI/UX)", "Software Computing", "Gaming & Graphics Design", "Content Creation & Social Media", "Digital Marketing", "AI Automation", "Multi-Disciplinary Household Family Bundle", "Rise to Capital"];
+const skills = ["Product Design (UI/UX)", "Software Computing", "Gaming & Graphics Design", "Content Creation & Social Media", "Digital Marketing", "AI Automation", "Multi-Disciplinary Family Bundle", "Rise to Capital"];
 type FormState = { parentName: string; parentEmail: string; studentName: string; studentAge: string; primarySkill: string; availability: string };
 const initialState: FormState = { parentName: "", parentEmail: "", studentName: "", studentAge: "", primarySkill: "", availability: "" };
 
