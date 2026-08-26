@@ -72,3 +72,13 @@
 - [x] Add “In Motion” to the responsive public navigation and create a clear route into the archive.
 - [x] Build the archive with scalable placeholders ready for future authentic event photography and editorial captions.
 - [x] Validate the Family Bundle naming and responsive community archive before saving a checkpoint.
+- [x] Expand course management to edit course title, description, duration, featured status, price, and payment link.
+- [x] Add safe course removal controls with an administrator confirmation step.
+- [x] Expand site-content management to cover all editable public-page headings, supporting copy, partner narrative, and archive section text.
+- [x] Create the archive-moment database model with title, caption, category, image reference, bento placement, publication state, and timestamp.
+- [x] Add protected In Motion photo upload, captioning, categorisation, bento-placement, publish, and removal controls.
+- [x] Render published archive moments as authentic photo-backed cards in the public In Motion bento page.
+- [x] Validate admin course editing, full content management, secure archive publishing, and responsive public archive updates before saving a checkpoint.
+- [x] Add Admin-editable Rise to Capital partner narrative fields and bind the public partnership page to them.
+- [ ] Browser-test authenticated course edits, confirmed course removal, archive image upload, archive publishing, and public archive refresh.
+- [ ] Save a new checkpoint after the remaining CMS validation passes.

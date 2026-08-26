@@ -74,7 +74,23 @@ export const academyEvents = mysqlTable("academy_events", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const archiveMoments = mysqlTable("archive_moments", {
+  id: int("id").autoincrement().primaryKey(),
+  title: varchar("title", { length: 180 }).notNull(),
+  caption: text("caption").notNull(),
+  category: varchar("category", { length: 96 }).notNull(),
+  imageKey: varchar("imageKey", { length: 512 }).notNull(),
+  imageUrl: text("imageUrl").notNull(),
+  bentoSize: mysqlEnum("bentoSize", ["standard", "wide", "tall", "feature"]).notNull().default("standard"),
+  published: int("published").notNull().default(0),
+  sortOrder: int("sortOrder").notNull().default(0),
+  capturedAt: varchar("capturedAt", { length: 96 }).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export type Course = typeof courses.$inferSelect;
 export type InsertCourse = typeof courses.$inferInsert;
 export type StudentLead = typeof studentLeads.$inferSelect;
 export type AcademyEvent = typeof academyEvents.$inferSelect;
+export type ArchiveMoment = typeof archiveMoments.$inferSelect;

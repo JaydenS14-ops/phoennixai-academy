@@ -2,6 +2,7 @@ import { asc, count, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   academyEvents,
+  archiveMoments,
   courses,
   InsertUser,
   pageViews,
@@ -112,12 +113,40 @@ const academyContent = [
   { contentKey: "hero_eyebrow", contentValue: "Purpose-led skills for tomorrow’s builders" },
   { contentKey: "hero_title", contentValue: "Building capable futures through business, technology & purpose." },
   { contentKey: "hero_description", contentValue: "Live, project-led learning for children, teens, and adults ready to build with clarity, confidence, and conviction." },
-  { contentKey: "mandate", contentValue: "At PhoennixAI, we don't raise followers - we raise leaders and builders. We remind every learner that you're kings, not servants - owners, not labourers." },
+  { contentKey: "mandate", contentValue: "At PhoennixAI, we don't raise followers. We raise leaders and builders. We remind every learner that you're kings, builders, and owners. You're created to create." },
+  { contentKey: "mandate_label", contentValue: "Our mandate" },
+  { contentKey: "mandate_heading", contentValue: "More than education." },
+  { contentKey: "mandate_supporting_text", contentValue: "An environment where gifts are discovered, activated, and applied to meaningful work." },
+  { contentKey: "footer_purpose", contentValue: "Purpose-led learning for future builders, leaders, and innovators.\nYou're Created to Create." },
   { contentKey: "footer_address", contentValue: "58 Peregrine Road, Essex, IG6 3SZ" },
+  { contentKey: "footer_email", contentValue: "info@phoennixai.com" },
+  { contentKey: "footer_hours", contentValue: "Mon–Fri · 08:00–18:00 UK Time" },
   { contentKey: "social_instagram", contentValue: "" },
   { contentKey: "social_linkedin", contentValue: "" },
   { contentKey: "social_x", contentValue: "" },
   { contentKey: "social_facebook", contentValue: "" },
+  { contentKey: "inmotion_eyebrow", contentValue: "The Builder Archive" },
+  { contentKey: "inmotion_title", contentValue: "In Motion." },
+  { contentKey: "inmotion_intro", contentValue: "A living visual archive for alumni moments, founder gatherings, capital conversations, retreats, and the people building meaningful impact across technology and business." },
+  { contentKey: "inmotion_status_label", contentValue: "Growing with the community" },
+  { contentKey: "inmotion_status_heading", contentValue: "Every photograph will become a record of momentum." },
+  { contentKey: "inmotion_status_text", contentValue: "This archive is prepared for authentic community imagery. Publish approved Academy and partner moments through the protected Admin Management Centre." },
+  { contentKey: "inmotion_section_label", contentValue: "Built for real moments" },
+  { contentKey: "inmotion_section_heading", contentValue: "A bento archive that grows with the work." },
+  { contentKey: "inmotion_section_text", contentValue: "The page accommodates event photography, short editorial captions, collaborator highlights, and evolving programmes without losing its clarity or sense of craft." },
+  { contentKey: "inmotion_cta_label", contentValue: "For builders and partners" },
+  { contentKey: "inmotion_cta_heading", contentValue: "Have a moment that belongs in the archive?" },
+  { contentKey: "inmotion_cta_text", contentValue: "As the community grows, the archive can feature approved partner events, alumni milestones, and moments that reflect the Academy’s work in the real world." },
+  { contentKey: "rise_partner_eyebrow", contentValue: "In collaboration with Conquest Capital Advisors" },
+  { contentKey: "rise_title", contentValue: "Rise to Capital." },
+  { contentKey: "rise_intro", contentValue: "PhoennixAI and Conquest Capital Advisors have collaborated to offer advanced entrepreneur and capital-readiness training. Developed by Mr Papadoyianis, Rise to Capital provides practical insight into the step-by-step process of business feasibility and fundraising." },
+  { contentKey: "rise_approach_label", contentValue: "Programme approach" },
+  { contentKey: "rise_approach_heading", contentValue: "Founder mindset meets practical capital readiness." },
+  { contentKey: "rise_approach_feasibility", contentValue: "Business feasibility and fundraising preparation" },
+  { contentKey: "rise_approach_partner", contentValue: "Conquest Capital Advisors partner learning" },
+  { contentKey: "rise_outcomes_label", contentValue: "What you will gain" },
+  { contentKey: "rise_outcomes_heading", contentValue: "Become ready to make the right capital conversation." },
+  { contentKey: "rise_outcomes_intro", contentValue: "Through the fifteen modules, you will gain a deep understanding of the preparation, structure, and fundraising process for a conceptual, start-up, or operating business." },
 ];
 
 async function ensureAcademyDefaults() {
@@ -135,15 +164,17 @@ async function ensureAcademyDefaults() {
 
 export async function getAcademyCatalog() {
   const db = await ensureAcademyDefaults();
-  const [courseList, contentList, eventList] = await Promise.all([
+  const [courseList, contentList, eventList, archiveList] = await Promise.all([
     db.select().from(courses).orderBy(asc(courses.sortOrder)),
     db.select().from(siteContent),
     db.select().from(academyEvents).orderBy(desc(academyEvents.createdAt)),
+    db.select().from(archiveMoments).where(eq(archiveMoments.published, 1)).orderBy(asc(archiveMoments.sortOrder), desc(archiveMoments.createdAt)),
   ]);
   return {
     courses: courseList,
     content: Object.fromEntries(contentList.map(item => [item.contentKey, item.contentValue])),
     events: eventList,
+    archiveMoments: archiveList,
   };
 }
 
@@ -184,14 +215,31 @@ export async function getAdminOverview() {
 
 export async function updateAcademyCourse(input: {
   id: number;
+  title: string;
+  description: string;
+  duration: string;
   pricePence: number;
   paymentLink: string | null;
+  featured: boolean;
 }) {
   const db = await ensureAcademyDefaults();
   await db.update(courses).set({
+    title: input.title,
+    description: input.description,
+    duration: input.duration,
     pricePence: input.pricePence,
     paymentLink: input.paymentLink,
+    featured: input.featured ? 1 : 0,
   }).where(eq(courses.id, input.id));
+}
+
+export async function deleteAcademyCourse(id: number) {
+  const db = await ensureAcademyDefaults();
+  const [courseCount] = await db.select({ total: count() }).from(courses);
+  if (Number(courseCount?.total ?? 0) <= 1) {
+    throw new Error("At least one programme must remain in the catalogue.");
+  }
+  await db.delete(courses).where(eq(courses.id, id));
 }
 
 export async function createAcademyCourse(input: {
@@ -237,4 +285,53 @@ export async function createAcademyEvent(input: {
 export async function deleteAcademyEvent(id: number) {
   const db = await ensureAcademyDefaults();
   await db.delete(academyEvents).where(eq(academyEvents.id, id));
+}
+
+export async function getAdminArchiveMoments() {
+  const db = await ensureAcademyDefaults();
+  return db.select().from(archiveMoments).orderBy(asc(archiveMoments.sortOrder), desc(archiveMoments.createdAt));
+}
+
+export async function createArchiveMoment(input: {
+  title: string;
+  caption: string;
+  category: string;
+  imageKey: string;
+  imageUrl: string;
+  bentoSize: "standard" | "wide" | "tall" | "feature";
+  published: boolean;
+  capturedAt: string;
+}) {
+  const db = await ensureAcademyDefaults();
+  const [lastMoment] = await db.select({ sortOrder: archiveMoments.sortOrder }).from(archiveMoments).orderBy(desc(archiveMoments.sortOrder)).limit(1);
+  await db.insert(archiveMoments).values({
+    ...input,
+    published: input.published ? 1 : 0,
+    sortOrder: (lastMoment?.sortOrder ?? -1) + 1,
+  });
+}
+
+export async function updateArchiveMoment(input: {
+  id: number;
+  title: string;
+  caption: string;
+  category: string;
+  bentoSize: "standard" | "wide" | "tall" | "feature";
+  published: boolean;
+  capturedAt: string;
+}) {
+  const db = await ensureAcademyDefaults();
+  await db.update(archiveMoments).set({
+    title: input.title,
+    caption: input.caption,
+    category: input.category,
+    bentoSize: input.bentoSize,
+    published: input.published ? 1 : 0,
+    capturedAt: input.capturedAt,
+  }).where(eq(archiveMoments.id, input.id));
+}
+
+export async function deleteArchiveMoment(id: number) {
+  const db = await ensureAcademyDefaults();
+  await db.delete(archiveMoments).where(eq(archiveMoments.id, id));
 }

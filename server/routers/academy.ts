@@ -2,16 +2,22 @@ import { z } from "zod";
 import {
   createAcademyCourse,
   createAcademyEvent,
+  createArchiveMoment,
   createStudentLead,
+  deleteAcademyCourse,
+  deleteArchiveMoment,
   deleteAcademyEvent,
+  getAdminArchiveMoments,
   getAcademyCatalog,
   getAdminOverview,
   recordPageView,
+  updateArchiveMoment,
   updateAcademyContent,
   updateAcademyCourse,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { answerAcademyQuestion } from "../academyChat";
+import { storagePut } from "../storage";
 
 const leadInput = z.object({
   parentName: z.string().trim().min(2).max(160),
@@ -21,6 +27,15 @@ const leadInput = z.object({
   primarySkill: z.string().trim().min(2).max(160),
   availability: z.string().trim().min(8).max(2000),
 });
+
+const bentoSize = z.enum(["standard", "wide", "tall", "feature"]);
+const imageMimeType = z.enum(["image/jpeg", "image/png", "image/webp"]);
+
+function archiveFileExtension(mimeType: z.infer<typeof imageMimeType>) {
+  if (mimeType === "image/png") return "png";
+  if (mimeType === "image/webp") return "webp";
+  return "jpg";
+}
 
 export const academyRouter = router({
   catalog: publicProcedure.query(() => getAcademyCatalog()),
@@ -49,12 +64,19 @@ export const academyRouter = router({
     updateCourse: adminProcedure
       .input(z.object({
         id: z.number().int().positive(),
+        title: z.string().trim().min(2).max(180),
+        description: z.string().trim().min(10).max(2000),
+        duration: z.string().trim().min(2).max(96),
         pricePence: z.number().int().min(0).max(10000000),
         paymentLink: z.string().trim().url().nullable(),
+        featured: z.boolean(),
       }))
       .mutation(({ input }) => updateAcademyCourse(input)),
+    deleteCourse: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => deleteAcademyCourse(input.id)),
     updateContent: adminProcedure
-      .input(z.object({ contentKey: z.string().min(1).max(96), contentValue: z.string().trim().min(1).max(10000) }))
+      .input(z.object({ contentKey: z.string().min(1).max(96), contentValue: z.string().trim().max(10000) }))
       .mutation(({ input }) => updateAcademyContent(input.contentKey, input.contentValue)),
     createEvent: adminProcedure
       .input(z.object({
@@ -67,5 +89,51 @@ export const academyRouter = router({
     deleteEvent: adminProcedure
       .input(z.object({ id: z.number().int().positive() }))
       .mutation(({ input }) => deleteAcademyEvent(input.id)),
+    archiveMoments: adminProcedure.query(() => getAdminArchiveMoments()),
+    createArchiveMoment: adminProcedure
+      .input(z.object({
+        title: z.string().trim().min(2).max(180),
+        caption: z.string().trim().min(2).max(2000),
+        category: z.string().trim().min(2).max(96),
+        bentoSize,
+        published: z.boolean(),
+        capturedAt: z.string().trim().min(2).max(96),
+        fileName: z.string().trim().min(1).max(180),
+        imageBase64: z.string().min(100).max(6000000),
+        imageMimeType,
+      }))
+      .mutation(async ({ input }) => {
+        const imageBuffer = Buffer.from(input.imageBase64, "base64");
+        if (!imageBuffer.length || imageBuffer.byteLength > 4_500_000) {
+          throw new Error("Please choose a valid JPEG, PNG, or WebP image up to 4 MB.");
+        }
+        const safeName = input.fileName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 72) || "archive-moment";
+        const extension = archiveFileExtension(input.imageMimeType);
+        const { key, url } = await storagePut(`academy-archive/${Date.now()}-${safeName}.${extension}`, imageBuffer, input.imageMimeType);
+        await createArchiveMoment({
+          title: input.title,
+          caption: input.caption,
+          category: input.category,
+          imageKey: key,
+          imageUrl: url,
+          bentoSize: input.bentoSize,
+          published: input.published,
+          capturedAt: input.capturedAt,
+        });
+      }),
+    updateArchiveMoment: adminProcedure
+      .input(z.object({
+        id: z.number().int().positive(),
+        title: z.string().trim().min(2).max(180),
+        caption: z.string().trim().min(2).max(2000),
+        category: z.string().trim().min(2).max(96),
+        bentoSize,
+        published: z.boolean(),
+        capturedAt: z.string().trim().min(2).max(96),
+      }))
+      .mutation(({ input }) => updateArchiveMoment(input)),
+    deleteArchiveMoment: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => deleteArchiveMoment(input.id)),
   }),
 });
