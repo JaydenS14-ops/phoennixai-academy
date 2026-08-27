@@ -10,13 +10,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { BarChart3, CalendarDays, FileText, GraduationCap, ImagePlus, LogOut } from "lucide-react";
+import { BarChart3, CalendarDays, FileText, GraduationCap, ImagePlus, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import AcademyAnalytics from "./AcademyAnalytics";
 
 const PHOENIX_LOGO = "/manus-storage/phoennixai-phoenix-logo_7d43347d.jpg";
 const menuItems = [
-  { icon: BarChart3, label: "Overview", key: "overview" },
+  { icon: LayoutDashboard, label: "Overview", key: "overview" },
   { icon: BarChart3, label: "Analytics", key: "analytics" },
   { icon: GraduationCap, label: "Course management", key: "courses" },
   { icon: CalendarDays, label: "Luma events", key: "events" },

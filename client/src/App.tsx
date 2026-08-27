@@ -15,6 +15,7 @@ import InMotion from "./pages/InMotion";
 import { trpc } from "./lib/trpc";
 import { useAcademyAnalytics } from "./hooks/useAcademyAnalytics";
 import { useLocation } from "wouter";
+import AcademyFooter from "./components/AcademyFooter";
 
 function PublicRouteTracker() {
   const [location] = useLocation();
@@ -30,6 +31,7 @@ function PublicRouteTracker() {
 }
 
 function Router() {
+  const [location] = useLocation();
   // make sure to consider if you need authentication for certain routes
   return (
     <><PublicRouteTracker /><Switch>
@@ -43,7 +45,7 @@ function Router() {
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
-    </Switch></>
+    </Switch>{location !== "/admin" ? <AcademyFooter /> : null}</>
   );
 }
 

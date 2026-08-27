@@ -127,3 +127,10 @@
 - [x] Add exact filtered-data comparisons for acquisition trends and traffic-source breakdown.
 - [x] Add exact filtered-data comparisons for form continuation, pathway popularity, activity timing, and CTA performance.
 - [x] Revalidate every filtered Analytics panel and export format before saving a checkpoint.
+- [x] Add the approved public footer consistently to every public page and route.
+- [x] Correct dark-mode programme-card text contrast so titles and actions remain legible.
+- [x] Refine Admin enquiry-pathway label wrapping and contrast for narrow table columns.
+- [x] Replace the duplicate Admin Overview and Analytics navigation icon with a distinct Overview icon.
+- [x] Validate the layout and visual-clarity refinements across public and Admin desktop/mobile views before checkpointing.
+- [x] Replace the temporary no-wrap Admin pathway badge rule with a responsive treatment that preserves readability without overflow.
+- [x] Capture authenticated Admin desktop and mobile visual checks for the distinct Overview and Analytics icons and long pathway labels.

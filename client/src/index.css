@@ -153,6 +153,8 @@
   .dark .academy-surface { background-color: #172231 !important; color: #F7F6F2 !important; }
   .dark .academy-surface .academy-title { color: #F7F6F2 !important; }
   .dark .academy-surface .academy-copy { color: #D0DEE1 !important; }
+  main table tbody td:first-child { width: 11.5rem; min-width: 11.5rem; }
+  main table tbody td:first-child > span { display: inline-grid; max-width: 11.5rem; grid-template-columns: minmax(0, 1fr); align-items: center; border-radius: .5rem; overflow-wrap: anywhere; text-align: center; line-height: 1.35; }
   .admin-overview-header-exports { display: none !important; }
   main > .mx-auto > header .flex.flex-wrap.gap-2 { display: none !important; }
   footer > .container:last-child { font-size: .68rem !important; letter-spacing: .1em !important; color: #607178 !important; }
