@@ -171,3 +171,7 @@
 - [x] Create and integrate a curriculum-specific hero background aligned to practical business, technology, leadership, and builder learning.
 - [x] Preserve copy readability and cinematic visual continuity across curriculum desktop and mobile presentation.
 - [x] Validate the curriculum hero image, composition, contrast, and responsive layout before checkpointing.
+- [x] Create and integrate a Programme-specific hero background aligned to practical business, technology, creative, and builder learning.
+- [x] Add visually distinct, programme-specific image treatments to the curriculum pathway cards without obscuring course information.
+- [x] Add accessible All, Business, and Technology filters to the public programme catalogue.
+- [x] Validate the Programme hero, programme-specific visual treatments, filtering, copy contrast, and responsive layout before checkpointing.
