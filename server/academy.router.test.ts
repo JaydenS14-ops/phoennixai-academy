@@ -8,6 +8,8 @@ const mocks = vi.hoisted(() => ({
   deleteAcademyCourse: vi.fn(),
   deleteArchiveMoment: vi.fn(),
   deleteAcademyEvent: vi.fn(),
+  deleteStudentLead: vi.fn(),
+  deleteStudentLeads: vi.fn(),
   getAdminArchiveMoments: vi.fn(),
   getAdminAnalytics: vi.fn().mockResolvedValue({ metrics: {}, dailyTrend: [], acquisition: [], ctaPerformance: [], funnel: [], fieldDropOff: [], pathwayPopularity: [], activity: [], exportRows: [] }),
   recordAnalyticsEvent: vi.fn(),
@@ -27,6 +29,8 @@ vi.mock("./db", () => ({
   deleteAcademyCourse: mocks.deleteAcademyCourse,
   deleteArchiveMoment: mocks.deleteArchiveMoment,
   deleteAcademyEvent: mocks.deleteAcademyEvent,
+  deleteStudentLead: mocks.deleteStudentLead,
+  deleteStudentLeads: mocks.deleteStudentLeads,
   getAdminArchiveMoments: mocks.getAdminArchiveMoments,
   getAdminAnalytics: mocks.getAdminAnalytics,
   getAcademyCatalog: vi.fn(),
@@ -147,6 +151,24 @@ describe("academy intake and administration contracts", () => {
     const event = { eventType: "course_view" as const, path: "/courses", visitorKey: "e91b6623-351e-4ad9-8fd6-8aa843881c12", source: "social" as const, pathway: "AI Automation", detail: "Programme card visible" };
     await caller.trackAnalyticsEvent(event);
     expect(mocks.recordAnalyticsEvent).toHaveBeenCalledWith(event);
+  });
+
+  it("restricts lead deletion to administrator sessions", async () => {
+    const anonymous = academyRouter.createCaller(context());
+    await expect(anonymous.admin.deleteLead({ id: 1 })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    await admin.admin.deleteLead({ id: 7 });
+    expect(mocks.deleteStudentLead).toHaveBeenCalledWith(7);
+  });
+
+  it("validates and passes bounded bulk lead cleanup to the persistence helper", async () => {
+    const anonymous = academyRouter.createCaller(context());
+    await expect(anonymous.admin.deleteLeads({ ids: [1, 2] })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    await admin.admin.deleteLeads({ ids: [4, 4, 9] });
+    expect(mocks.deleteStudentLeads).toHaveBeenCalledWith([4, 9]);
+    await expect(admin.admin.deleteLeads({ ids: [] })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(admin.admin.deleteLeads({ ids: Array.from({ length: 101 }, (_, index) => index + 1) })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("restricts filtered strategic analytics to administrator sessions", async () => {

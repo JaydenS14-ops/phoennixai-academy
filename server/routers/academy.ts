@@ -7,6 +7,8 @@ import {
   deleteAcademyCourse,
   deleteArchiveMoment,
   deleteAcademyEvent,
+  deleteStudentLead,
+  deleteStudentLeads,
   getAdminArchiveMoments,
   getAdminAnalytics,
   getAcademyCatalog,
@@ -74,6 +76,8 @@ export const academyRouter = router({
     .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
     overview: adminProcedure.query(() => getAdminOverview()),
+    deleteLead: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteStudentLead(input.id)),
+    deleteLeads: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => deleteStudentLeads(Array.from(new Set(input.ids)))),
     analytics: adminProcedure.input(analyticsFilterInput).query(({ input }) => getAdminAnalytics(input)),
     resetAnalytics: adminProcedure.input(z.object({ confirmation: z.literal("RESET ANALYTICS") })).mutation(() => resetAnalyticsTelemetry()),
     createCourse: adminProcedure

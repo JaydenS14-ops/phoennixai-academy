@@ -159,3 +159,7 @@
 - [x] Make public navigation submenus close on outside click, Escape, route selection, and moving away, with only one submenu open at a time.
 - [x] Lighten the homepage hero image slightly while preserving strong heading and body-text contrast.
 - [x] Validate FAQ access, submenu dismissal, hero visibility, and responsive layouts before checkpointing.
+- [x] Add Admin-only per-record lead deletion with explicit confirmation for duplicate, spam, or accidental submissions.
+- [x] Add safe bulk lead cleanup selection without affecting analytics, programmes, events, archive items, or site content.
+- [x] Fix the public Home submenu so it closes reliably on outside interaction, pointer exit, Escape, route selection, and menu switching.
+- [x] Validate lead-cleanup boundaries, deletion confirmations, and submenu behavior across responsive views before checkpointing.

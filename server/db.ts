@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, inArray, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   academyEvents,
@@ -197,6 +197,17 @@ export async function recordPageView(path: string, visitorKey: string) {
   const db = await getDb();
   if (!db) return;
   await db.insert(pageViews).values({ path, visitorKey });
+}
+
+export async function deleteStudentLead(id: number) {
+  const db = await ensureAcademyDefaults();
+  await db.delete(studentLeads).where(eq(studentLeads.id, id));
+}
+
+export async function deleteStudentLeads(ids: number[]) {
+  if (!ids.length) return;
+  const db = await ensureAcademyDefaults();
+  await db.delete(studentLeads).where(inArray(studentLeads.id, ids));
 }
 
 export async function getAdminOverview() {
