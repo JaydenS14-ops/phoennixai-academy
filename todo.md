@@ -155,3 +155,7 @@
 - [x] Replace the Academy purpose and leadership-learning background imagery with a prestigious business and technology education centre scene.
 - [x] Reduce the current public lighting intensity while preserving the approved subtle fantasy atmosphere and In Motion colour direction.
 - [x] Validate the new imagery, lighting, and readability across public desktop, mobile, light, and dark views before checkpointing.
+- [x] Add a concise expandable FAQ section to the enquiry experience and a short homepage reassurance entry point.
+- [x] Make public navigation submenus close on outside click, Escape, route selection, and moving away, with only one submenu open at a time.
+- [x] Lighten the homepage hero image slightly while preserving strong heading and body-text contrast.
+- [x] Validate FAQ access, submenu dismissal, hero visibility, and responsive layouts before checkpointing.
