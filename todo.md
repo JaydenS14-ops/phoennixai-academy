@@ -134,3 +134,6 @@
 - [x] Validate the layout and visual-clarity refinements across public and Admin desktop/mobile views before checkpointing.
 - [x] Replace the temporary no-wrap Admin pathway badge rule with a responsive treatment that preserves readability without overflow.
 - [x] Capture authenticated Admin desktop and mobile visual checks for the distinct Overview and Analytics icons and long pathway labels.
+- [x] Add a shared, restrained fantasy-inspired ambient lighting layer across all public routes.
+- [x] Refine hero, section, card, and footer lighting highlights without reducing text or control contrast.
+- [x] Respect reduced-motion preferences and verify the lighting system across desktop, mobile, light, and dark views before checkpointing.

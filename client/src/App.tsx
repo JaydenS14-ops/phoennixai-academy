@@ -34,7 +34,7 @@ function Router() {
   const [location] = useLocation();
   // make sure to consider if you need authentication for certain routes
   return (
-    <><PublicRouteTracker /><Switch>
+    <><PublicRouteTracker /><div className={location !== "/admin" ? "academy-public-shell" : undefined}><Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/courses"} component={CourseCatalog} />
       <Route path={"/apply"} component={Intake} />
@@ -45,7 +45,7 @@ function Router() {
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
-    </Switch>{location !== "/admin" ? <AcademyFooter /> : null}</>
+    </Switch></div>{location !== "/admin" ? <AcademyFooter /> : null}</>
   );
 }
 
