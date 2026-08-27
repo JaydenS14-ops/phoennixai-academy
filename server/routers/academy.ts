@@ -8,9 +8,11 @@ import {
   deleteArchiveMoment,
   deleteAcademyEvent,
   getAdminArchiveMoments,
+  getAdminAnalytics,
   getAcademyCatalog,
   getAdminOverview,
   recordPageView,
+  recordAnalyticsEvent,
   updateArchiveMoment,
   updateAcademyContent,
   updateAcademyCourse,
@@ -35,6 +37,20 @@ const leadInput = z.object({
 
 const bentoSize = z.enum(["standard", "wide", "tall", "feature"]);
 const imageMimeType = z.enum(["image/jpeg", "image/png", "image/webp"]);
+const analyticsEventInput = z.object({
+  eventType: z.enum(["page_view", "course_view", "cta_click", "enquiry_start", "pathway_selected", "enquiry_field", "enquiry_step", "enquiry_submit"]),
+  path: z.string().trim().min(1).max(255),
+  visitorKey: z.string().trim().min(8).max(128),
+  source: z.enum(["direct", "organic", "social", "referral", "campaign", "other"]),
+  pathway: z.string().trim().max(160).optional(),
+  detail: z.string().trim().max(160).optional(),
+});
+const analyticsFilterInput = z.object({
+  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  pathway: z.string().max(160).optional(),
+  source: z.enum(["all", "direct", "organic", "social", "referral", "campaign", "other"]).optional(),
+});
 
 function archiveFileExtension(mimeType: z.infer<typeof imageMimeType>) {
   if (mimeType === "image/png") return "png";
@@ -47,6 +63,7 @@ export const academyRouter = router({
   trackPageView: publicProcedure
     .input(z.object({ path: z.string().max(255), visitorKey: z.string().min(8).max(128) }))
     .mutation(({ input }) => recordPageView(input.path, input.visitorKey)),
+  trackAnalyticsEvent: publicProcedure.input(analyticsEventInput).mutation(({ input }) => recordAnalyticsEvent(input)),
   submitLead: publicProcedure.input(leadInput).mutation(async ({ input }) => {
     await createStudentLead(input);
     return { success: true } as const;
@@ -56,6 +73,7 @@ export const academyRouter = router({
     .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
     overview: adminProcedure.query(() => getAdminOverview()),
+    analytics: adminProcedure.input(analyticsFilterInput).query(({ input }) => getAdminAnalytics(input)),
     createCourse: adminProcedure
       .input(z.object({
         title: z.string().trim().min(2).max(180),

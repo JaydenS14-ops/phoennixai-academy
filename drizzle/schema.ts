@@ -65,6 +65,17 @@ export const pageViews = mysqlTable("page_views", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const analyticsEvents = mysqlTable("analytics_events", {
+  id: int("id").autoincrement().primaryKey(),
+  eventType: varchar("eventType", { length: 48 }).notNull(),
+  path: varchar("path", { length: 255 }).notNull(),
+  visitorKey: varchar("visitorKey", { length: 128 }).notNull(),
+  source: varchar("source", { length: 48 }).notNull().default("direct"),
+  pathway: varchar("pathway", { length: 160 }),
+  detail: varchar("detail", { length: 160 }),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
 export const academyEvents = mysqlTable("academy_events", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 180 }).notNull(),
@@ -95,3 +106,4 @@ export type InsertCourse = typeof courses.$inferInsert;
 export type StudentLead = typeof studentLeads.$inferSelect;
 export type AcademyEvent = typeof academyEvents.$inferSelect;
 export type ArchiveMoment = typeof archiveMoments.$inferSelect;
+export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;

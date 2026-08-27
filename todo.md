@@ -106,3 +106,24 @@
 - [x] Revalidate desktop and mobile public navigation after the test-backed interaction checks pass.
 - [x] Run a non-submitting browser check through contact, pathway, and availability for every enquiry type.
 - [x] Record browser-level evidence of specific validation feedback for an incomplete pathway before checkpointing.
+- [x] Fix Home sub-navigation so Mandate and Events always scroll to the intended homepage section from any route.
+- [x] Establish dark-mode contrast safeguards for programme cards, navigation, and form controls.
+- [x] Replace the existing multi-course bundle with a distinct Multi-Discipline Hybrid Bundle and add a separate holiday-focused Family Bundle for children, siblings, and parents.
+- [x] Remove duplicated overview export controls and retain one clear export location.
+- [x] Add an Admin Analytics workspace with date, pathway, and source filters plus acquisition, conversion, drop-off, timing, popularity, and activity insights.
+- [x] Track privacy-conscious public interaction events needed for the analytics workspace, including source, page and course views, enquiry starts, steps, and submissions.
+- [x] Add current-filter analytics data exports in CSV, JSON, and a print-friendly executive summary format.
+- [x] Validate dashboard calculations, exports, public bundle presentation, Home anchor navigation, dark-mode contrast, and responsive layouts before saving a checkpoint.
+- [x] Track real programme-card visibility from the public programme catalogue and reserve course-view events for actual programme exposure.
+- [x] Record enquiry-path selection separately so it cannot be mistaken for a course-view event.
+- [x] Align the funnel labels and calculations with the measured programme-view and enquiry interactions.
+- [x] Revalidate filtered analytics charts and exports using real programme-view telemetry before saving a checkpoint.
+- [x] Verify the filtered Analytics funnel and chart values show real programme-card exposure at the Viewed programmes stage.
+- [x] Inspect filtered CSV, JSON, and PDF exports for the corrected programme-view event model before saving a checkpoint.
+- [x] Add an exact-count browser assertion comparing filtered programme-view export records with the visible Analytics funnel stage.
+- [x] Revalidate the filtered chart and funnel totals after the exact-count Analytics check passes.
+- [x] Add exact browser assertions for filtered page views, programme views, enquiry starts, submissions, and all funnel stages.
+- [x] Revalidate the full filtered Analytics dashboard and all export formats after comprehensive count checks pass.
+- [x] Add exact filtered-data comparisons for acquisition trends and traffic-source breakdown.
+- [x] Add exact filtered-data comparisons for form continuation, pathway popularity, activity timing, and CTA performance.
+- [x] Revalidate every filtered Analytics panel and export format before saving a checkpoint.

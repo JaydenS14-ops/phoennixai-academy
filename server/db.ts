@@ -1,7 +1,8 @@
-import { asc, count, desc, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   academyEvents,
+  analyticsEvents,
   archiveMoments,
   courses,
   InsertUser,
@@ -106,7 +107,8 @@ const academyCourses = [
   { slug: "content-creation", title: "Content Creation & Social Media", description: "Create purposeful content and understand how to communicate with clarity across digital platforms.", duration: "6–8 months", pricePence: 6500, featured: 0, sortOrder: 4 },
   { slug: "digital-marketing", title: "Digital Marketing", description: "Learn practical digital marketing, audience insight, and campaign strategy for meaningful growth.", duration: "6–8 months", pricePence: 6500, featured: 0, sortOrder: 5 },
   { slug: "ai-automation", title: "AI Automation", description: "Use AI tools responsibly to streamline work, solve problems, and turn concepts into operational systems.", duration: "6–8 months", pricePence: 12000, featured: 0, sortOrder: 6 },
-  { slug: "family-bundle", title: "Multi-Disciplinary Family Bundle", description: "A flexible, low-risk family pathway that brings practical technology and creative learning together.", duration: "Flexible monthly", pricePence: 9900, featured: 1, sortOrder: 0 },
+  { slug: "hybrid-bundle", title: "Multi-Discipline Hybrid Bundle", description: "A flexible multi-course pathway for learners who want to combine more than one practical technology or creative programme.", duration: "Flexible monthly", pricePence: 9900, featured: 1, sortOrder: 0 },
+  { slug: "holiday-family-bundle", title: "Family Bundle", description: "A school-holiday learning offer for children, siblings, and parents to explore practical technology and creative skills together.", duration: "Summer, bank holidays & half term", pricePence: 0, featured: 0, sortOrder: 7 },
 ];
 
 const academyContent = [
@@ -335,4 +337,65 @@ export async function updateArchiveMoment(input: {
 export async function deleteArchiveMoment(id: number) {
   const db = await ensureAcademyDefaults();
   await db.delete(archiveMoments).where(eq(archiveMoments.id, id));
+}
+
+export type AnalyticsEventInput = {
+  eventType: "page_view" | "course_view" | "cta_click" | "enquiry_start" | "pathway_selected" | "enquiry_field" | "enquiry_step" | "enquiry_submit";
+  path: string;
+  visitorKey: string;
+  source: "direct" | "organic" | "social" | "referral" | "campaign" | "other";
+  pathway?: string;
+  detail?: string;
+};
+
+export type AnalyticsFilter = { startDate?: string; endDate?: string; pathway?: string; source?: string };
+
+export async function recordAnalyticsEvent(input: AnalyticsEventInput) {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(analyticsEvents).values({ ...input, pathway: input.pathway || null, detail: input.detail || null });
+}
+
+function withinRange(value: Date, start?: Date, end?: Date) { return (!start || value >= start) && (!end || value <= end); }
+function dayKey(value: Date) { return value.toISOString().slice(0, 10); }
+function percentage(part: number, whole: number) { return whole ? Number(((part / whole) * 100).toFixed(1)) : 0; }
+
+export async function getAdminAnalytics(filter: AnalyticsFilter) {
+  const db = await ensureAcademyDefaults();
+  const start = filter.startDate ? new Date(`${filter.startDate}T00:00:00.000Z`) : undefined;
+  const end = filter.endDate ? new Date(`${filter.endDate}T23:59:59.999Z`) : undefined;
+  const conditions = [start ? gte(analyticsEvents.createdAt, start) : undefined, end ? lte(analyticsEvents.createdAt, end) : undefined, filter.source && filter.source !== "all" ? eq(analyticsEvents.source, filter.source) : undefined, filter.pathway && filter.pathway !== "all" ? eq(analyticsEvents.pathway, filter.pathway) : undefined].filter(Boolean);
+  const [events, leads] = await Promise.all([
+    db.select().from(analyticsEvents).where(conditions.length ? and(...conditions) : undefined).orderBy(asc(analyticsEvents.createdAt)),
+    db.select().from(studentLeads).orderBy(desc(studentLeads.createdAt)),
+  ]);
+  const filteredLeads = leads.filter(lead => withinRange(lead.createdAt, start, end) && (!filter.pathway || filter.pathway === "all" || lead.primarySkill === filter.pathway));
+  const pageEvents = events.filter(event => event.eventType === "page_view");
+  const uniqueVisitors = new Set(events.map(event => event.visitorKey)).size;
+  const courseViews = events.filter(event => event.eventType === "course_view");
+  const enquiryStarts = events.filter(event => event.eventType === "enquiry_start");
+  const submissions = events.filter(event => event.eventType === "enquiry_submit");
+  const daily = new Map<string, { date: string; pageViews: number; visitors: Set<string>; enquiries: number }>();
+  for (const event of events) { const key = dayKey(event.createdAt); const row = daily.get(key) ?? { date: key, pageViews: 0, visitors: new Set<string>(), enquiries: 0 }; row.visitors.add(event.visitorKey); if (event.eventType === "page_view") row.pageViews += 1; if (event.eventType === "enquiry_submit") row.enquiries += 1; daily.set(key, row); }
+  const dailyTrend = Array.from(daily.values()).map(row => ({ date: row.date, pageViews: row.pageViews, visitors: row.visitors.size, enquiries: row.enquiries }));
+  const sourceCounts = new Map<string, number>(); pageEvents.forEach(event => sourceCounts.set(event.source, (sourceCounts.get(event.source) ?? 0) + 1));
+  const acquisition = Array.from(sourceCounts.entries()).map(([source, value]) => ({ source, value })).sort((a, b) => b.value - a.value);
+  const ctaCounts = new Map<string, number>(); events.filter(event => event.eventType === "cta_click").forEach(event => ctaCounts.set(event.detail ?? "Other action", (ctaCounts.get(event.detail ?? "Other action") ?? 0) + 1));
+  const ctaPerformance = Array.from(ctaCounts.entries()).map(([label, clicks]) => ({ label, clicks, ctr: percentage(clicks, pageEvents.length) })).sort((a, b) => b.clicks - a.clicks);
+  const funnelRows = [
+    { label: "Page view", value: new Set(pageEvents.map(event => event.visitorKey)).size },
+    { label: "Viewed programmes", value: new Set(courseViews.map(event => event.visitorKey)).size },
+    { label: "Started enquiry", value: new Set(enquiryStarts.map(event => event.visitorKey)).size },
+    { label: "Submitted enquiry", value: new Set(submissions.map(event => event.visitorKey)).size },
+  ];
+  const funnel = funnelRows.map((row, index) => ({ ...row, dropOff: index ? percentage((funnelRows[index - 1]?.value ?? 0) - row.value, funnelRows[index - 1]?.value ?? 0) : 0 }));
+  const completedFields = new Map<string, Set<string>>(); events.filter(event => event.eventType === "enquiry_field").forEach(event => { const set = completedFields.get(event.detail ?? "Field") ?? new Set<string>(); set.add(event.visitorKey); completedFields.set(event.detail ?? "Field", set); });
+  const fieldDropOff = Array.from(completedFields.entries()).map(([label, visitors]) => ({ label: label.replaceAll("_", " "), completed: visitors.size, exits: Math.max(enquiryStarts.length - visitors.size, 0) })).sort((a, b) => b.exits - a.exits);
+  const byVisitor = new Map<string, { first?: Date; submit?: Date }>(); events.forEach(event => { const row = byVisitor.get(event.visitorKey) ?? {}; if (event.eventType === "page_view" && !row.first) row.first = event.createdAt; if (event.eventType === "enquiry_submit" && !row.submit) row.submit = event.createdAt; byVisitor.set(event.visitorKey, row); });
+  const conversionDays = Array.from(byVisitor.values()).filter(row => row.first && row.submit).map(row => (row.submit!.getTime() - row.first!.getTime()) / 86_400_000);
+  const pathwayCounts = new Map<string, number>(); filteredLeads.forEach(lead => pathwayCounts.set(lead.primarySkill, (pathwayCounts.get(lead.primarySkill) ?? 0) + 1));
+  const pathwayPopularity = Array.from(pathwayCounts.entries()).map(([pathway, enquiries]) => ({ pathway, enquiries })).sort((a, b) => b.enquiries - a.enquiries);
+  const activity = Array.from({ length: 7 }, (_, day) => Array.from({ length: 24 }, (_, hour) => ({ day, hour, value: 0 })));
+  events.forEach(event => { const date = event.createdAt; activity[(date.getUTCDay() + 6) % 7][date.getUTCHours()].value += 1; });
+  return { filters: { startDate: filter.startDate ?? null, endDate: filter.endDate ?? null, pathway: filter.pathway ?? "all", source: filter.source ?? "all" }, metrics: { totalPageViews: pageEvents.length, uniqueVisitors, enquiryStarts: enquiryStarts.length, submissions: submissions.length, conversionRate: percentage(submissions.length, pageEvents.length), averageDaysToConvert: conversionDays.length ? Number((conversionDays.reduce((sum, value) => sum + value, 0) / conversionDays.length).toFixed(1)) : null }, dailyTrend, acquisition, ctaPerformance, funnel, fieldDropOff, pathwayPopularity, activity, exportRows: events.map(event => ({ eventType: event.eventType, path: event.path, source: event.source, pathway: event.pathway ?? "", detail: event.detail ?? "", visitorKey: event.visitorKey, createdAt: event.createdAt.toISOString() })) };
 }

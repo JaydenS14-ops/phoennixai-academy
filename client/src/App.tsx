@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch } from "wouter";
+import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
@@ -11,11 +12,27 @@ import Admin from "./pages/Admin";
 import RiseToCapital from "./pages/RiseToCapital";
 import Curriculum from "./pages/Curriculum";
 import InMotion from "./pages/InMotion";
+import { trpc } from "./lib/trpc";
+import { useAcademyAnalytics } from "./hooks/useAcademyAnalytics";
+import { useLocation } from "wouter";
+
+function PublicRouteTracker() {
+  const [location] = useLocation();
+  const pageView = trpc.academy.trackPageView.useMutation();
+  const { track } = useAcademyAnalytics();
+  useEffect(() => {
+    if (location === "/admin") return;
+    const key = "phoennixai-visitor"; const visitorKey = sessionStorage.getItem(key) ?? crypto.randomUUID(); sessionStorage.setItem(key, visitorKey);
+    pageView.mutate({ path: location, visitorKey });
+    track("page_view", { path: location });
+  }, [location]);
+  return null;
+}
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
   return (
-    <Switch>
+    <><PublicRouteTracker /><Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/courses"} component={CourseCatalog} />
       <Route path={"/apply"} component={Intake} />
@@ -26,7 +43,7 @@ function Router() {
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
-    </Switch>
+    </Switch></>
   );
 }
 

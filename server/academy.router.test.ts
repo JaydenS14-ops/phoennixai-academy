@@ -9,6 +9,8 @@ const mocks = vi.hoisted(() => ({
   deleteArchiveMoment: vi.fn(),
   deleteAcademyEvent: vi.fn(),
   getAdminArchiveMoments: vi.fn(),
+  getAdminAnalytics: vi.fn().mockResolvedValue({ metrics: {}, dailyTrend: [], acquisition: [], ctaPerformance: [], funnel: [], fieldDropOff: [], pathwayPopularity: [], activity: [], exportRows: [] }),
+  recordAnalyticsEvent: vi.fn(),
   storagePut: vi.fn().mockResolvedValue({ key: "academy-archive/real-moment.jpg", url: "/manus-storage/academy-archive/real-moment.jpg" }),
   updateArchiveMoment: vi.fn(),
   updateAcademyCourse: vi.fn(),
@@ -25,9 +27,11 @@ vi.mock("./db", () => ({
   deleteArchiveMoment: mocks.deleteArchiveMoment,
   deleteAcademyEvent: mocks.deleteAcademyEvent,
   getAdminArchiveMoments: mocks.getAdminArchiveMoments,
+  getAdminAnalytics: mocks.getAdminAnalytics,
   getAcademyCatalog: vi.fn(),
   getAdminOverview: vi.fn(),
   recordPageView: vi.fn(),
+  recordAnalyticsEvent: mocks.recordAnalyticsEvent,
   updateAcademyContent: mocks.updateAcademyContent,
   updateArchiveMoment: mocks.updateArchiveMoment,
   updateAcademyCourse: mocks.updateAcademyCourse,
@@ -134,5 +138,21 @@ describe("academy intake and administration contracts", () => {
   it("calculates a one-decimal conversion rate without a divide-by-zero error", () => {
     expect(calculateConversionRate(0, 2)).toBe(0);
     expect(calculateConversionRate(37, 4)).toBe(10.8);
+  });
+
+  it("records an actual programme-view event without accepting visitor-entered form content", async () => {
+    const caller = academyRouter.createCaller(context());
+    const event = { eventType: "course_view" as const, path: "/courses", visitorKey: "e91b6623-351e-4ad9-8fd6-8aa843881c12", source: "social" as const, pathway: "AI Automation", detail: "Programme card visible" };
+    await caller.trackAnalyticsEvent(event);
+    expect(mocks.recordAnalyticsEvent).toHaveBeenCalledWith(event);
+  });
+
+  it("restricts filtered strategic analytics to administrator sessions", async () => {
+    const anonymous = academyRouter.createCaller(context());
+    await expect(anonymous.admin.analytics({ source: "social" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    const filters = { startDate: "2026-08-01", endDate: "2026-08-31", pathway: "AI Automation", source: "social" as const };
+    await admin.admin.analytics(filters);
+    expect(mocks.getAdminAnalytics).toHaveBeenCalledWith(filters);
   });
 });

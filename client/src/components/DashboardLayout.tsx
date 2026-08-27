@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/sidebar";
 import { BarChart3, CalendarDays, FileText, GraduationCap, ImagePlus, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
+import AcademyAnalytics from "./AcademyAnalytics";
 
 const PHOENIX_LOGO = "/manus-storage/phoennixai-phoenix-logo_7d43347d.jpg";
 const menuItems = [
   { icon: BarChart3, label: "Overview", key: "overview" },
+  { icon: BarChart3, label: "Analytics", key: "analytics" },
   { icon: GraduationCap, label: "Course management", key: "courses" },
   { icon: CalendarDays, label: "Luma events", key: "events" },
   { icon: ImagePlus, label: "In Motion archive", key: "archive" },
@@ -23,7 +25,7 @@ const menuItems = [
 ];
 
 export default function DashboardLayout({ children, activeSection = "overview", onSectionChange, onSignOut }: { children: React.ReactNode; activeSection?: string; onSectionChange?: (section: string) => void; onSignOut?: () => void; }) {
-  return <SidebarProvider defaultOpen><DashboardLayoutContent activeSection={activeSection} onSectionChange={onSectionChange} onSignOut={onSignOut}>{children}</DashboardLayoutContent></SidebarProvider>;
+  return <SidebarProvider defaultOpen><DashboardLayoutContent activeSection={activeSection} onSectionChange={onSectionChange} onSignOut={onSignOut}>{activeSection === "analytics" ? <AcademyAnalytics pathways={["Product Design (UI/UX)", "Software Computing", "Gaming & Graphics Design", "Content Creation & Social Media", "Digital Marketing", "AI Automation", "Multi-Discipline Hybrid Bundle", "Family Bundle", "Rise to Capital", "Work Experience with PhoennixAI Agency", "Agency Apprenticeship"]} /> : children}</DashboardLayoutContent></SidebarProvider>;
 }
 
 function DashboardLayoutContent({ children, activeSection, onSectionChange, onSignOut }: { children: React.ReactNode; activeSection: string; onSectionChange?: (section: string) => void; onSignOut?: () => void; }) {
