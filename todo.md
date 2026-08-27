@@ -190,3 +190,8 @@
 - [x] Rebuild the enquiry and FAQ visual system so light mode has coherent, polished surfaces and fully readable text.
 - [x] Preserve the existing enquiry pathway logic, validation, telemetry, and FAQ interactions while refining page hierarchy.
 - [x] Validate the enquiry and FAQ presentation in light and dark modes across desktop and mobile before checkpointing.
+- [x] Shorten the Admin login support link label to “Contact support”.
+- [x] Remove the public Programme comparison panel and all “Decision support” content.
+- [x] Update the Programme hero heading to “Programmes designed for builders.”
+- [x] Replace similar course-card imagery with distinct visual treatments for AI Automation, Product Design, Software Computing, Digital Marketing, and Gaming & Graphics.
+- [x] Validate concise login support copy, simplified catalogue content, distinct imagery, accessibility, and responsive presentation before checkpointing.

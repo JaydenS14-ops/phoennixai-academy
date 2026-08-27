@@ -43,7 +43,7 @@ export default function AdminLogin() {
       </div>
       <Button type="submit" disabled={login.isPending} className="mt-7 w-full rounded-md bg-[#ABA944] font-mono text-[10px] uppercase tracking-[0.1em] text-[#1F2426] hover:bg-[#C9C877]">{login.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign in securely"}</Button>
       <Link href={ADMIN_PUBLIC_HOME_PATH} className="mt-5 block text-center font-body text-sm text-[#C5F0FF] transition-colors hover:text-[#C9C877] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#42B4E7]/70">← {ADMIN_LOGIN_RETURN_LABEL}</Link>
-      <a href={`mailto:${supportEmail}?subject=Admin%20access%20support`} className="mt-3 block text-center font-body text-xs text-[#D0DEE1] transition-colors hover:text-[#C9C877] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#42B4E7]/70">Need help signing in? Contact PhoennixAI support</a>
+      <a href={`mailto:${supportEmail}?subject=Admin%20access%20support`} className="mt-3 block text-center font-body text-xs text-[#D0DEE1] transition-colors hover:text-[#C9C877] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#42B4E7]/70">Need help signing in? Contact support</a>
     </form>
   </div>;
 }
