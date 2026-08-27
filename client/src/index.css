@@ -153,19 +153,29 @@
   .dark .academy-surface { background-color: #172231 !important; color: #F7F6F2 !important; }
   .dark .academy-surface .academy-title { color: #F7F6F2 !important; }
   .dark .academy-surface .academy-copy { color: #D0DEE1 !important; }
-  .academy-public-shell { position: relative; overflow: clip; background: radial-gradient(42rem 42rem at 100% 8%, rgba(66,180,231,.10), transparent 62%), radial-gradient(36rem 36rem at 0% 40%, rgba(171,169,68,.075), transparent 65%); }
+  .academy-public-shell { position: relative; overflow: clip; background: radial-gradient(48rem 48rem at 100% 8%, rgba(66,180,231,.19), transparent 62%), radial-gradient(40rem 40rem at 0% 40%, rgba(171,169,68,.13), transparent 65%), #0D1520; box-shadow: inset 0 0 8rem rgba(1,7,14,.2); }
   .academy-public-shell main > section { position: relative; isolation: isolate; }
-  .academy-public-shell main > section::before { content: ""; pointer-events: none; position: absolute; inset: 0; z-index: 0; background: radial-gradient(26rem 24rem at 100% 24%, rgba(66,180,231,.10), transparent 70%), radial-gradient(20rem 22rem at 3% 84%, rgba(171,169,68,.075), transparent 74%); opacity: .8; }
-  .academy-public-shell main > section:nth-of-type(even)::before { background: radial-gradient(28rem 26rem at 0% 25%, rgba(66,180,231,.09), transparent 72%), radial-gradient(22rem 22rem at 96% 74%, rgba(171,169,68,.08), transparent 70%); }
+  .academy-public-shell main > section::before { content: ""; pointer-events: none; position: absolute; inset: 0; z-index: 0; background: radial-gradient(30rem 28rem at 100% 24%, rgba(66,180,231,.19), transparent 70%), radial-gradient(24rem 25rem at 3% 84%, rgba(171,169,68,.12), transparent 74%); opacity: .92; animation: ambient-shimmer 9s ease-in-out infinite alternate; }
+  .academy-public-shell main > section:nth-of-type(even)::before { background: radial-gradient(32rem 28rem at 0% 25%, rgba(66,180,231,.17), transparent 72%), radial-gradient(25rem 24rem at 96% 74%, rgba(171,169,68,.13), transparent 70%); }
   .academy-public-shell main > section > .container { position: relative; z-index: 1; }
   .academy-public-shell main > .container { position: relative; isolation: isolate; }
-  .academy-public-shell main > .container::before { content: ""; pointer-events: none; position: absolute; inset: -2rem -1rem; z-index: 0; background: radial-gradient(24rem 22rem at 94% 14%, rgba(66,180,231,.11), transparent 72%), radial-gradient(20rem 20rem at 3% 76%, rgba(171,169,68,.075), transparent 72%); }
+  .academy-public-shell main > .container::before { content: ""; pointer-events: none; position: absolute; inset: -2rem -1rem; z-index: 0; background: radial-gradient(28rem 25rem at 94% 14%, rgba(66,180,231,.18), transparent 72%), radial-gradient(22rem 22rem at 3% 76%, rgba(171,169,68,.12), transparent 72%); animation: ambient-shimmer 9s ease-in-out infinite alternate; }
   .academy-public-shell main > .container > * { position: relative; z-index: 1; }
-  .academy-public-shell .academy-surface { box-shadow: 0 0 0 1px rgba(66,180,231,.05), 0 16px 36px rgba(13,21,32,.08); }
-  .dark .academy-public-shell .academy-surface { box-shadow: 0 0 0 1px rgba(66,180,231,.16), 0 18px 48px rgba(0,0,0,.22), inset 0 1px 0 rgba(197,240,255,.04); }
+  .academy-public-shell .academy-surface, .academy-public-shell main article { transition: transform 220ms cubic-bezier(.23,1,.32,1), border-color 220ms cubic-bezier(.23,1,.32,1), box-shadow 220ms cubic-bezier(.23,1,.32,1); box-shadow: 0 0 0 1px rgba(66,180,231,.12), 0 16px 36px rgba(13,21,32,.12); }
+  .academy-public-shell .academy-surface:hover, .academy-public-shell .academy-surface:focus-within, .academy-public-shell main article:hover, .academy-public-shell main article:focus-within { transform: translateY(-3px); border-color: rgba(66,180,231,.68) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.38), 0 0 20px rgba(66,180,231,.24), 0 0 52px rgba(66,180,231,.16), 0 20px 42px rgba(1,7,14,.28); }
+  .dark .academy-public-shell .academy-surface { box-shadow: 0 0 0 1px rgba(66,180,231,.24), 0 18px 48px rgba(0,0,0,.26), inset 0 1px 0 rgba(197,240,255,.06); }
+  .dark .academy-public-shell .academy-surface:hover, .dark .academy-public-shell .academy-surface:focus-within { border-color: rgba(168,230,255,.78) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.42), 0 0 22px rgba(66,180,231,.38), 0 0 56px rgba(66,180,231,.22), 0 22px 46px rgba(0,0,0,.34); }
+  .academy-public-shell :is(main button, main a.inline-flex, header button, header a.inline-flex) { transition: transform 180ms cubic-bezier(.23,1,.32,1), border-color 180ms cubic-bezier(.23,1,.32,1), box-shadow 180ms cubic-bezier(.23,1,.32,1), background-color 180ms cubic-bezier(.23,1,.32,1); }
+  .academy-public-shell :is(main button, main a.inline-flex, header button, header a.inline-flex):hover, .academy-public-shell :is(main button, main a.inline-flex, header button, header a.inline-flex):focus-visible { transform: translateY(-2px); border-color: rgba(168,230,255,.78) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.26), 0 0 16px rgba(66,180,231,.32), 0 0 34px rgba(66,180,231,.18); }
+  [data-academy-header] :is(button, a.inline-flex) { transition: transform 180ms cubic-bezier(.23,1,.32,1), border-color 180ms cubic-bezier(.23,1,.32,1), box-shadow 180ms cubic-bezier(.23,1,.32,1), background-color 180ms cubic-bezier(.23,1,.32,1); }
+  [data-academy-header] :is(button, a.inline-flex):hover, [data-academy-header] :is(button, a.inline-flex):focus-visible { transform: translateY(-2px); border-color: rgba(168,230,255,.78) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.26), 0 0 16px rgba(66,180,231,.32), 0 0 34px rgba(66,180,231,.18); }
+  [data-academy-header] a[href="/apply"] { transition: transform 180ms cubic-bezier(.23,1,.32,1), border-color 180ms cubic-bezier(.23,1,.32,1), box-shadow 180ms cubic-bezier(.23,1,.32,1), background-color 180ms cubic-bezier(.23,1,.32,1); }
+  [data-academy-header] a[href="/apply"]:hover, [data-academy-header] a[href="/apply"]:focus-visible { transform: translateY(-2px); border-color: rgba(168,230,255,.78) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.26), 0 0 16px rgba(66,180,231,.32), 0 0 34px rgba(66,180,231,.18); }
   [data-academy-footer] { position: relative; isolation: isolate; overflow: hidden; background-image: radial-gradient(30rem 20rem at 0% 100%, rgba(66,180,231,.10), transparent 72%), radial-gradient(28rem 20rem at 100% 0%, rgba(171,169,68,.075), transparent 74%); }
   [data-academy-footer]::before { content: ""; pointer-events: none; position: absolute; inset: 0; z-index: 0; background-image: linear-gradient(115deg, transparent 0%, rgba(197,240,255,.025) 38%, transparent 65%); }
   [data-academy-footer] > * { position: relative; z-index: 1; }
+  nav[aria-label="Mobile navigation"] a { font-family: "Fira Code", ui-monospace, monospace; font-size: .625rem; font-weight: 500; line-height: 1.35; letter-spacing: .12em; text-transform: uppercase; }
+  nav[aria-label="Mobile navigation"] section > p { font-family: "Fira Code", ui-monospace, monospace; font-size: .5625rem; font-weight: 600; line-height: 1.35; letter-spacing: .15em; }
   main table tbody td:first-child { width: 11.5rem; min-width: 11.5rem; }
   main table tbody td:first-child > span { display: inline-grid; max-width: 11.5rem; grid-template-columns: minmax(0, 1fr); align-items: center; border-radius: .5rem; overflow-wrap: anywhere; text-align: center; line-height: 1.35; }
   .admin-overview-header-exports { display: none !important; }
@@ -178,6 +188,7 @@
   .reveal-delay-2 { opacity: 0; transform: translateY(20px); animation: reveal-in .8s .22s cubic-bezier(.23,1,.32,1) forwards; }
   @keyframes reveal-in { to { opacity: 1; transform: translateY(0); } }
   @keyframes orbital-drift { 0%, 100% { transform: translate3d(0,0,0) rotate(0); } 50% { transform: translate3d(-10px,14px,0) rotate(12deg); } }
+  @keyframes ambient-shimmer { from { opacity: .72; } to { opacity: 1; } }
   @keyframes partner-drift { to { transform: translateX(calc(-50% - .375rem)); } }
-  @media (prefers-reduced-motion: reduce) { .orbital, .reveal, .reveal-delay, .reveal-delay-2, .partner-rail { animation: none; opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .orbital, .reveal, .reveal-delay, .reveal-delay-2, .partner-rail, .academy-public-shell main > section::before, .academy-public-shell main > .container::before { animation: none; opacity: 1; transform: none; } .academy-public-shell .academy-surface, .academy-public-shell main article, .academy-public-shell :is(main button, main a.inline-flex, header button, header a.inline-flex) { transition: none; } }
 }

@@ -137,3 +137,7 @@
 - [x] Add a shared, restrained fantasy-inspired ambient lighting layer across all public routes.
 - [x] Refine hero, section, card, and footer lighting highlights without reducing text or control contrast.
 - [x] Respect reduced-motion preferences and verify the lighting system across desktop, mobile, light, and dark views before checkpointing.
+- [x] Harmonise the mobile and tablet navigation typography, hierarchy, spacing, and active state with the Academy visual system.
+- [x] Intensify the shared public fantasy lighting with controlled blue illumination while retaining content legibility.
+- [x] Add luminous, accessible hover and focus states to public cards and buttons.
+- [x] Validate the responsive navigation and lighting interactions across desktop, tablet, mobile, light, dark, and reduced-motion views before checkpointing.
