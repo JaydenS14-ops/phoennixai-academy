@@ -178,3 +178,6 @@
 - [x] Rename the Programmes submenu labels to “Explore courses” and “Curriculum framework” across the responsive navigation.
 - [x] Add concise, scannable course-outline previews to public programme cards without crowding pricing or enquiry actions.
 - [x] Validate updated Programme navigation labels and course-outline previews on desktop and mobile before checkpointing.
+- [x] Make the Admin Management Centre logo return to the public homepage without adding a separate cluttered navigation button.
+- [x] Route secure Admin sign-out to the dedicated `/admin/login` portal after clearing the authenticated session.
+- [x] Add an understated public-home return link inside the Admin login card and validate logout plus return navigation.
