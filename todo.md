@@ -168,3 +168,6 @@
 - [x] Add Admin lead search and date-range filters over the lead table.
 - [x] Add Admin lead pagination that works with search, date, and spam-state filters.
 - [x] Validate persistent submenu selection and lead cleanup, filtering, pagination, spam restore, and data boundaries before checkpointing.
+- [x] Create and integrate a curriculum-specific hero background aligned to practical business, technology, leadership, and builder learning.
+- [x] Preserve copy readability and cinematic visual continuity across curriculum desktop and mobile presentation.
+- [x] Validate the curriculum hero image, composition, contrast, and responsive layout before checkpointing.
