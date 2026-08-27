@@ -145,6 +145,6 @@
 - [x] Add a darker, readable fantasy overlay treatment to every public hero image.
 - [x] Apply the intensified luminous overlay and hover treatment to approved In Motion archive imagery.
 - [x] Validate protected reset boundaries and responsive public visual treatments before checkpointing.
-- [ ] Refine the existing fantasy lighting to a subtler, more atmospheric treatment without adding scroll animation or changing the site structure.
-- [ ] Preserve readable content contrast while improving blue glow pools, olive accents, illuminated edges, and visual depth.
-- [ ] Validate the refined lighting across public desktop, mobile, light, dark, and reduced-motion views before checkpointing.
+- [x] Refine the existing fantasy lighting to a subtler, more atmospheric treatment without adding scroll animation or changing the site structure.
+- [x] Preserve readable content contrast while improving blue glow pools, olive accents, illuminated edges, and visual depth.
+- [x] Validate the refined lighting across public desktop, mobile, light, dark, and reduced-motion views before checkpointing.
