@@ -187,3 +187,6 @@
 - [x] Show the most recent Admin sign-in timestamp in the protected dashboard.
 - [x] Add a branded login-page support contact link for administrators who need access assistance.
 - [x] Validate programme image management, comparison, lighter heroes, recent sign-in activity, login support, and responsive/protected flows before checkpointing.
+- [x] Rebuild the enquiry and FAQ visual system so light mode has coherent, polished surfaces and fully readable text.
+- [x] Preserve the existing enquiry pathway logic, validation, telemetry, and FAQ interactions while refining page hierarchy.
+- [x] Validate the enquiry and FAQ presentation in light and dark modes across desktop and mobile before checkpointing.
