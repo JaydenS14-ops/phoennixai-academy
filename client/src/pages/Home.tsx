@@ -10,11 +10,11 @@ import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { useLiveCatalog } from "@/hooks/useLiveCatalog";
 
-const HERO_IMAGE = "/manus-storage/academy-studio-hero_8bd2bb43.jpg";
-const MANDATE_IMAGE = "/manus-storage/academy-mandate_4ca25858.jpg";
+const HERO_IMAGE = "/manus-storage/phoennixai-academy-hero_9e615f29.jpg";
+const MANDATE_IMAGE = "/manus-storage/phoennixai-mandate-leaders_c2451ab3.jpg";
 const PROJECT_IMAGE = "/manus-storage/phoennixai-family-bundle_93e3b3a8.jpg";
 const INNOVATION_IMAGE = "/manus-storage/academy-innovation_05cc55e6.jpg";
-const EVENTS_IMAGE = "/manus-storage/academy-events-brochure_8e1c8429.jpg";
+const EVENTS_IMAGE = "/manus-storage/phoennixai-events-gala_3a4c077a.jpg";
 
 function usePageView(path: string) { const track = trpc.academy.trackPageView.useMutation(); useEffect(() => { const key = "phoennixai-visitor"; const visitorKey = sessionStorage.getItem(key) ?? crypto.randomUUID(); sessionStorage.setItem(key, visitorKey); track.mutate({ path, visitorKey }); }, [path]); }
 function useHomeAnchor() { useEffect(() => { let timers: number[] = []; const revealAnchor = () => { timers.forEach(window.clearTimeout); timers = []; const id = window.location.hash.slice(1); if (!id) return; [0, 120, 420, 900].forEach(delay => timers.push(window.setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "auto", block: "start" }), delay))); }; revealAnchor(); window.addEventListener("hashchange", revealAnchor); return () => { timers.forEach(window.clearTimeout); window.removeEventListener("hashchange", revealAnchor); }; }, []); }

@@ -151,3 +151,7 @@
 - [x] Replace the homepage Family Bundle section image with an approved family-pathway visual.
 - [x] Add a soft cinematic glow to public navigation item hover and keyboard-focus states.
 - [x] Validate the Family Bundle visual and navigation glow across responsive public views before checkpointing.
+- [x] Replace the Events background with an authentic professional event, party, or gala atmosphere.
+- [x] Replace the Academy purpose and leadership-learning background imagery with a prestigious business and technology education centre scene.
+- [x] Reduce the current public lighting intensity while preserving the approved subtle fantasy atmosphere and In Motion colour direction.
+- [x] Validate the new imagery, lighting, and readability across public desktop, mobile, light, and dark views before checkpointing.
