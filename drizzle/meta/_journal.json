@@ -43,6 +43,13 @@
       "when": 1787816518586,
       "tag": "0005_clumsy_captain_midlands",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1787860392414,
+      "tag": "0006_lowly_rockslide",
+      "breakpoints": true
     }
   ]
 }

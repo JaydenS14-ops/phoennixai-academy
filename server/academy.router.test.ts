@@ -10,6 +10,11 @@ const mocks = vi.hoisted(() => ({
   deleteAcademyEvent: vi.fn(),
   deleteStudentLead: vi.fn(),
   deleteStudentLeads: vi.fn(),
+  getAdminLeadPage: vi.fn().mockResolvedValue({ leads: [], total: 0, page: 1, pageSize: 10, totalPages: 1 }),
+  markStudentLeadSpam: vi.fn(),
+  markStudentLeadsSpam: vi.fn(),
+  restoreStudentLead: vi.fn(),
+  restoreStudentLeads: vi.fn(),
   getAdminArchiveMoments: vi.fn(),
   getAdminAnalytics: vi.fn().mockResolvedValue({ metrics: {}, dailyTrend: [], acquisition: [], ctaPerformance: [], funnel: [], fieldDropOff: [], pathwayPopularity: [], activity: [], exportRows: [] }),
   recordAnalyticsEvent: vi.fn(),
@@ -31,6 +36,11 @@ vi.mock("./db", () => ({
   deleteAcademyEvent: mocks.deleteAcademyEvent,
   deleteStudentLead: mocks.deleteStudentLead,
   deleteStudentLeads: mocks.deleteStudentLeads,
+  getAdminLeadPage: mocks.getAdminLeadPage,
+  markStudentLeadSpam: mocks.markStudentLeadSpam,
+  markStudentLeadsSpam: mocks.markStudentLeadsSpam,
+  restoreStudentLead: mocks.restoreStudentLead,
+  restoreStudentLeads: mocks.restoreStudentLeads,
   getAdminArchiveMoments: mocks.getAdminArchiveMoments,
   getAdminAnalytics: mocks.getAdminAnalytics,
   getAcademyCatalog: vi.fn(),
@@ -169,6 +179,30 @@ describe("academy intake and administration contracts", () => {
     expect(mocks.deleteStudentLeads).toHaveBeenCalledWith([4, 9]);
     await expect(admin.admin.deleteLeads({ ids: [] })).rejects.toMatchObject({ code: "BAD_REQUEST" });
     await expect(admin.admin.deleteLeads({ ids: Array.from({ length: 101 }, (_, index) => index + 1) })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  it("protects filtered and paginated lead retrieval", async () => {
+    const anonymous = academyRouter.createCaller(context());
+    await expect(anonymous.admin.leadPage({ status: "active", page: 1, pageSize: 10 })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    const filters = { search: "Valerie", fromDate: "2026-08-01", toDate: "2026-08-31", status: "spam" as const, page: 2, pageSize: 20 };
+    await admin.admin.leadPage(filters);
+    expect(mocks.getAdminLeadPage).toHaveBeenCalledWith(filters);
+  });
+
+  it("keeps spam marking and restore operations Admin-only and bounded", async () => {
+    const anonymous = academyRouter.createCaller(context());
+    await expect(anonymous.admin.markLeadsSpam({ ids: [1] })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    await admin.admin.markLeadSpam({ id: 3 });
+    await admin.admin.markLeadsSpam({ ids: [3, 3, 8] });
+    await admin.admin.restoreLead({ id: 8 });
+    await admin.admin.restoreLeads({ ids: [8, 8, 11] });
+    expect(mocks.markStudentLeadSpam).toHaveBeenCalledWith(3);
+    expect(mocks.markStudentLeadsSpam).toHaveBeenCalledWith([3, 8]);
+    expect(mocks.restoreStudentLead).toHaveBeenCalledWith(8);
+    expect(mocks.restoreStudentLeads).toHaveBeenCalledWith([8, 11]);
+    await expect(admin.admin.markLeadsSpam({ ids: Array.from({ length: 101 }, (_, index) => index + 1) })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("restricts filtered strategic analytics to administrator sessions", async () => {

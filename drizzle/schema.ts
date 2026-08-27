@@ -55,6 +55,7 @@ export const studentLeads = mysqlTable("student_leads", {
   studentAge: int("studentAge").notNull(),
   primarySkill: varchar("primarySkill", { length: 160 }).notNull(),
   availability: text("availability").notNull(),
+  status: mysqlEnum("status", ["active", "spam"]).notNull().default("active"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

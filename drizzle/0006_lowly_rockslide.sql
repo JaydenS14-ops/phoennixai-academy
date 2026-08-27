@@ -1,0 +1,1 @@
+ALTER TABLE `student_leads` ADD `status` enum('active','spam') DEFAULT 'active' NOT NULL;

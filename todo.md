@@ -163,3 +163,8 @@
 - [x] Add safe bulk lead cleanup selection without affecting analytics, programmes, events, archive items, or site content.
 - [x] Fix the public Home submenu so it closes reliably on outside interaction, pointer exit, Escape, route selection, and menu switching.
 - [x] Validate lead-cleanup boundaries, deletion confirmations, and submenu behavior across responsive views before checkpointing.
+- [x] Make Home and Programmes desktop submenus persist after click until deliberate dismissal or route selection.
+- [x] Add a recoverable spam state and Admin spam archive with restore capability for student leads.
+- [x] Add Admin lead search and date-range filters over the lead table.
+- [x] Add Admin lead pagination that works with search, date, and spam-state filters.
+- [x] Validate persistent submenu selection and lead cleanup, filtering, pagination, spam restore, and data boundaries before checkpointing.

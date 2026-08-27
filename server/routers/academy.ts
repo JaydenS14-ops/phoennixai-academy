@@ -9,6 +9,11 @@ import {
   deleteAcademyEvent,
   deleteStudentLead,
   deleteStudentLeads,
+  getAdminLeadPage,
+  markStudentLeadSpam,
+  markStudentLeadsSpam,
+  restoreStudentLead,
+  restoreStudentLeads,
   getAdminArchiveMoments,
   getAdminAnalytics,
   getAcademyCatalog,
@@ -75,9 +80,14 @@ export const academyRouter = router({
     .input(z.object({ question: z.string().trim().min(2).max(600) }))
     .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
-    overview: adminProcedure.query(() => getAdminOverview()),
+    overview: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), fromDate: z.string().date().optional(), toDate: z.string().date().optional(), status: z.enum(["active", "spam"]).default("active"), page: z.number().int().positive().default(1), pageSize: z.number().int().min(1).max(50).default(10) })).query(({ input }) => getAdminOverview(input)),
+    leadPage: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), fromDate: z.string().date().optional(), toDate: z.string().date().optional(), status: z.enum(["active", "spam"]).default("active"), page: z.number().int().positive().default(1), pageSize: z.number().int().min(1).max(50).default(10) })).query(({ input }) => getAdminLeadPage(input)),
     deleteLead: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteStudentLead(input.id)),
     deleteLeads: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => deleteStudentLeads(Array.from(new Set(input.ids)))),
+    markLeadSpam: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => markStudentLeadSpam(input.id)),
+    markLeadsSpam: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => markStudentLeadsSpam(Array.from(new Set(input.ids)))),
+    restoreLead: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => restoreStudentLead(input.id)),
+    restoreLeads: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => restoreStudentLeads(Array.from(new Set(input.ids)))),
     analytics: adminProcedure.input(analyticsFilterInput).query(({ input }) => getAdminAnalytics(input)),
     resetAnalytics: adminProcedure.input(z.object({ confirmation: z.literal("RESET ANALYTICS") })).mutation(() => resetAnalyticsTelemetry()),
     createCourse: adminProcedure

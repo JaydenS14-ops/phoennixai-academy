@@ -1,4 +1,4 @@
-import { and, asc, count, desc, eq, gte, inArray, lte } from "drizzle-orm";
+import { and, asc, count, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   academyEvents,
@@ -199,6 +199,21 @@ export async function recordPageView(path: string, visitorKey: string) {
   await db.insert(pageViews).values({ path, visitorKey });
 }
 
+export type AdminLeadStatus = "active" | "spam";
+export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; page?: number; pageSize?: number };
+
+function leadConditions(input: AdminLeadFilters = {}) {
+  const conditions = [eq(studentLeads.status, input.status ?? "active")];
+  const search = input.search?.trim();
+  if (search) {
+    const pattern = `%${search}%`;
+    conditions.push(or(like(studentLeads.parentName, pattern), like(studentLeads.parentEmail, pattern), like(studentLeads.studentName, pattern), like(studentLeads.primarySkill, pattern))!);
+  }
+  if (input.fromDate) conditions.push(gte(studentLeads.createdAt, new Date(`${input.fromDate}T00:00:00.000Z`)));
+  if (input.toDate) conditions.push(lte(studentLeads.createdAt, new Date(`${input.toDate}T23:59:59.999Z`)));
+  return and(...conditions);
+}
+
 export async function deleteStudentLead(id: number) {
   const db = await ensureAcademyDefaults();
   await db.delete(studentLeads).where(eq(studentLeads.id, id));
@@ -210,12 +225,47 @@ export async function deleteStudentLeads(ids: number[]) {
   await db.delete(studentLeads).where(inArray(studentLeads.id, ids));
 }
 
-export async function getAdminOverview() {
+export async function markStudentLeadSpam(id: number) {
   const db = await ensureAcademyDefaults();
-  const [[views], [leads], leadRows] = await Promise.all([
+  await db.update(studentLeads).set({ status: "spam" }).where(eq(studentLeads.id, id));
+}
+
+export async function markStudentLeadsSpam(ids: number[]) {
+  if (!ids.length) return;
+  const db = await ensureAcademyDefaults();
+  await db.update(studentLeads).set({ status: "spam" }).where(inArray(studentLeads.id, ids));
+}
+
+export async function restoreStudentLead(id: number) {
+  const db = await ensureAcademyDefaults();
+  await db.update(studentLeads).set({ status: "active" }).where(eq(studentLeads.id, id));
+}
+
+export async function restoreStudentLeads(ids: number[]) {
+  if (!ids.length) return;
+  const db = await ensureAcademyDefaults();
+  await db.update(studentLeads).set({ status: "active" }).where(inArray(studentLeads.id, ids));
+}
+
+export async function getAdminLeadPage(input: AdminLeadFilters = {}) {
+  const db = await ensureAcademyDefaults();
+  const pageSize = Math.min(Math.max(input.pageSize ?? 10, 1), 50);
+  const page = Math.max(input.page ?? 1, 1);
+  const where = leadConditions(input);
+  const [[totalRow], leadRows] = await Promise.all([
+    db.select({ total: count() }).from(studentLeads).where(where),
+    db.select().from(studentLeads).where(where).orderBy(desc(studentLeads.createdAt)).limit(pageSize).offset((page - 1) * pageSize),
+  ]);
+  const total = Number(totalRow?.total ?? 0);
+  return { leads: leadRows, total, page, pageSize, totalPages: Math.max(Math.ceil(total / pageSize), 1) };
+}
+
+export async function getAdminOverview(input: AdminLeadFilters = {}) {
+  const db = await ensureAcademyDefaults();
+  const [[views], [leads], leadPage] = await Promise.all([
     db.select({ total: count() }).from(pageViews),
-    db.select({ total: count() }).from(studentLeads),
-    db.select().from(studentLeads).orderBy(desc(studentLeads.createdAt)),
+    db.select({ total: count() }).from(studentLeads).where(leadConditions(input)),
+    getAdminLeadPage(input),
   ]);
   const totalViews = Number(views?.total ?? 0);
   const totalLeads = Number(leads?.total ?? 0);
@@ -223,7 +273,11 @@ export async function getAdminOverview() {
     totalViews,
     totalLeads,
     conversionRate: calculateConversionRate(totalViews, totalLeads),
-    leads: leadRows,
+    leads: leadPage.leads,
+    total: leadPage.total,
+    page: leadPage.page,
+    pageSize: leadPage.pageSize,
+    totalPages: leadPage.totalPages,
   };
 }
 
