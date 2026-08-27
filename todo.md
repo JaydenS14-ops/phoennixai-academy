@@ -92,3 +92,17 @@
 - [x] Update the protected Admin lead table to identify the applicant pathway and show appropriate contact labels on screen.
 - [x] Clarify the public Innovation in Practice section and its supporting studio image directly in the homepage experience.
 - [x] Revalidate the refreshed homepage and protected Admin lead presentation before saving the optimization checkpoint.
+- [x] Make public navigation tabs highlight according to the current page or active homepage section.
+- [x] Fix pathway-specific enquiry validation so Continue advances when the current step is complete and identifies the exact missing field when it is not.
+- [x] Validate active navigation states and all enquiry pathways on desktop and mobile before saving a checkpoint.
+- [x] Refine contact and availability step validation messages to identify only the specific missing or invalid detail.
+- [x] Exercise parent, adult learner, work-experience, and Agency apprenticeship pathway progression through all visible steps.
+- [x] Verify the active navigation state for public routes plus the Events and Our mandate homepage section links.
+- [x] Simplify the desktop primary navigation and group Home anchors such as Events and Our mandate under an accessible sub-navigation control.
+- [x] Preserve direct mobile access to all public routes and grouped Home anchors without creating a crowded menu.
+- [x] Validate the streamlined navigation alongside the confirmed enquiry progression fixes before saving a checkpoint.
+- [x] Add deterministic tests for parent, adult learner, work-experience, and Agency apprenticeship step validation and progression.
+- [x] Add deterministic tests for current-page and grouped Home section navigation states, including Events and Our mandate.
+- [x] Revalidate desktop and mobile public navigation after the test-backed interaction checks pass.
+- [x] Run a non-submitting browser check through contact, pathway, and availability for every enquiry type.
+- [x] Record browser-level evidence of specific validation feedback for an incomplete pathway before checkpointing.

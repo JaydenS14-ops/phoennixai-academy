@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
+import { enquiryStepError, type ApplicantType, type EnquiryFormState } from "@/lib/enquiryFlow";
 
-type ApplicantType = "parent_guardian" | "adult_learner" | "work_experience" | "agency_apprenticeship";
-type FormState = { applicantType: ApplicantType; parentName: string; parentEmail: string; studentName: string; studentAge: string; primarySkill: string; availability: string };
+type FormState = EnquiryFormState;
 const initialState: FormState = { applicantType: "parent_guardian", parentName: "", parentEmail: "", studentName: "", studentAge: "", primarySkill: "", availability: "" };
 const pathways: Array<{ id: ApplicantType; title: string; copy: string; icon: typeof UsersRound }> = [
   { id: "parent_guardian", title: "Parent or guardian", copy: "Find the right Academy pathway for a learner aged 8 and above.", icon: UsersRound },
@@ -31,7 +31,7 @@ export default function Intake() {
   const submitLead = trpc.academy.submitLead.useMutation({ onSuccess: () => { setSubmitted(true); toast.success("Your enquiry has been saved."); }, onError: error => toast.error(error.message) });
   const update = (key: keyof FormState, value: string) => setForm(current => ({ ...current, [key]: value }));
   const choosePathway = (applicantType: ApplicantType) => setForm(current => ({ ...current, applicantType, primarySkill: "", studentAge: "" }));
-  const validateStep = () => { if (step === 1 && (!form.parentName.trim() || !/^\S+@\S+\.\S+$/.test(form.parentEmail))) { toast.error(`Please add ${copy.contactName.toLowerCase()} and a valid email address.`); return false; } if (step === 2 && (!form.studentName.trim() || Number(form.studentAge) < minAge(form.applicantType) || !form.primarySkill)) { toast.error(`Please complete the required details. ${copy.ageHint}`); return false; } if (step === 3 && form.availability.trim().length < 8) { toast.error("Please tell us a little more about your availability or goals."); return false; } return true; };
+  const validateStep = () => { const error = enquiryStepError(step, form, { contactName: copy.contactName, personName: copy.personName, availability: copy.availability }); if (error) { toast.error(error); return false; } return true; };
   const next = () => { if (validateStep()) setStep(current => Math.min(3, current + 1)); };
   const submit = () => { if (!validateStep()) return; submitLead.mutate({ ...form, studentAge: Number(form.studentAge), studentName: isParent ? form.studentName : form.parentName }); };
   const fieldClass = "mt-2 h-11 border-[#556970]/35 bg-white text-[#1F2426] shadow-sm placeholder:text-[#6B7477] focus-visible:border-[#ABA944] focus-visible:ring-[#ABA944]/35 dark:bg-[#172231] dark:text-[#F7F6F2]";
