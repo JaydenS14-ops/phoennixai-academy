@@ -22,6 +22,7 @@ const mocks = vi.hoisted(() => ({
   storagePut: vi.fn().mockResolvedValue({ key: "academy-archive/real-moment.jpg", url: "/manus-storage/academy-archive/real-moment.jpg" }),
   updateArchiveMoment: vi.fn(),
   updateAcademyCourse: vi.fn(),
+  updateAcademyCourseImage: vi.fn(),
   updateAcademyContent: vi.fn(),
   answerAcademyQuestion: vi.fn().mockResolvedValue("The Prep School welcomes learners from age 8."),
 }));
@@ -51,6 +52,7 @@ vi.mock("./db", () => ({
   updateAcademyContent: mocks.updateAcademyContent,
   updateArchiveMoment: mocks.updateArchiveMoment,
   updateAcademyCourse: mocks.updateAcademyCourse,
+  updateAcademyCourseImage: mocks.updateAcademyCourseImage,
 }));
 
 vi.mock("./academyChat", () => ({ answerAcademyQuestion: mocks.answerAcademyQuestion }));
@@ -106,6 +108,18 @@ describe("academy intake and administration contracts", () => {
     const update = { id: 1, title: "Product Design", description: "A complete product design learning pathway.", duration: "6 months", pricePence: 8500, paymentLink: null, featured: false };
     await caller.admin.updateCourse(update);
     expect(mocks.updateAcademyCourse).toHaveBeenCalledWith(update);
+  });
+
+  it("stores a programme image through protected storage before linking the override", async () => {
+    const caller = academyRouter.createCaller(context(true));
+    await caller.admin.updateCourseImage({ id: 1, fileName: "product-design.jpg", imageBase64: "a".repeat(160), imageMimeType: "image/jpeg" });
+    expect(mocks.storagePut).toHaveBeenCalled();
+    expect(mocks.updateAcademyCourseImage).toHaveBeenCalledWith({ id: 1, imageKey: "academy-archive/real-moment.jpg", imageUrl: "/manus-storage/academy-archive/real-moment.jpg" });
+  });
+
+  it("prevents non-administrators from replacing programme imagery", async () => {
+    const caller = academyRouter.createCaller(context());
+    await expect(caller.admin.updateCourseImage({ id: 1, fileName: "product-design.jpg", imageBase64: "a".repeat(160), imageMimeType: "image/jpeg" })).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
   it("restricts course creation to administrator sessions", async () => {

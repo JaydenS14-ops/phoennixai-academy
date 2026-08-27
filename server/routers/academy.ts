@@ -24,6 +24,7 @@ import {
   updateArchiveMoment,
   updateAcademyContent,
   updateAcademyCourse,
+  updateAcademyCourseImage,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { answerAcademyQuestion } from "../academyChat";
@@ -45,6 +46,12 @@ const leadInput = z.object({
 
 const bentoSize = z.enum(["standard", "wide", "tall", "feature"]);
 const imageMimeType = z.enum(["image/jpeg", "image/png", "image/webp"]);
+const courseImageInput = z.object({
+  id: z.number().int().positive(),
+  fileName: z.string().trim().min(1).max(180),
+  imageBase64: z.string().min(100).max(6000000),
+  imageMimeType,
+});
 const analyticsEventInput = z.object({
   eventType: z.enum(["page_view", "course_view", "cta_click", "enquiry_start", "pathway_selected", "enquiry_field", "enquiry_step", "enquiry_submit"]),
   path: z.string().trim().min(1).max(255),
@@ -111,6 +118,19 @@ export const academyRouter = router({
         featured: z.boolean(),
       }))
       .mutation(({ input }) => updateAcademyCourse(input)),
+    updateCourseImage: adminProcedure
+      .input(courseImageInput)
+      .mutation(async ({ input }) => {
+        const imageBuffer = Buffer.from(input.imageBase64, "base64");
+        if (!imageBuffer.length || imageBuffer.byteLength > 4_500_000) throw new Error("Please choose a valid JPEG, PNG, or WebP image up to 4 MB.");
+        const safeName = input.fileName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 72) || "programme-image";
+        const extension = archiveFileExtension(input.imageMimeType);
+        const { key, url } = await storagePut(`academy-programmes/${Date.now()}-${safeName}.${extension}`, imageBuffer, input.imageMimeType);
+        await updateAcademyCourseImage({ id: input.id, imageKey: key, imageUrl: url });
+      }),
+    clearCourseImage: adminProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(({ input }) => updateAcademyCourseImage({ id: input.id, imageKey: null, imageUrl: null })),
     deleteCourse: adminProcedure
       .input(z.object({ id: z.number().int().positive() }))
       .mutation(({ input }) => deleteAcademyCourse(input.id)),

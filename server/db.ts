@@ -1,6 +1,7 @@
 import { and, asc, count, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  adminSignIns,
   academyEvents,
   analyticsEvents,
   archiveMoments,
@@ -199,6 +200,19 @@ export async function recordPageView(path: string, visitorKey: string) {
   await db.insert(pageViews).values({ path, visitorKey });
 }
 
+export async function recordAdminSignIn() {
+  const db = await getDb();
+  if (!db) return;
+  await db.insert(adminSignIns).values({});
+}
+
+export async function getLatestAdminSignIn() {
+  const db = await getDb();
+  if (!db) return null;
+  const [latest] = await db.select({ occurredAt: adminSignIns.occurredAt }).from(adminSignIns).orderBy(desc(adminSignIns.occurredAt)).limit(1);
+  return latest?.occurredAt ?? null;
+}
+
 export type AdminLeadStatus = "active" | "spam";
 export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; page?: number; pageSize?: number };
 
@@ -299,6 +313,11 @@ export async function updateAcademyCourse(input: {
     paymentLink: input.paymentLink,
     featured: input.featured ? 1 : 0,
   }).where(eq(courses.id, input.id));
+}
+
+export async function updateAcademyCourseImage(input: { id: number; imageKey: string | null; imageUrl: string | null }) {
+  const db = await ensureAcademyDefaults();
+  await db.update(courses).set({ imageKey: input.imageKey, imageUrl: input.imageUrl }).where(eq(courses.id, input.id));
 }
 
 export async function deleteAcademyCourse(id: number) {

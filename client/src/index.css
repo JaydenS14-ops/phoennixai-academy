@@ -161,7 +161,7 @@
   .academy-public-shell main > .container { position: relative; isolation: isolate; }
   .academy-public-shell main > .container::before { content: ""; pointer-events: none; position: absolute; inset: -2rem -1rem; z-index: 0; background: radial-gradient(30rem 27rem at 94% 14%, rgba(66,180,231,.115), transparent 74%), radial-gradient(24rem 24rem at 3% 76%, rgba(171,169,68,.075), transparent 74%); animation: ambient-shimmer 12s ease-in-out infinite alternate; }
   .academy-public-shell main > .container > * { position: relative; z-index: 1; }
-  .academy-public-shell .academy-hero-image { opacity: .2 !important; filter: brightness(.66) saturate(1.16) contrast(1.05); }
+  .academy-public-shell .academy-hero-image { opacity: .3 !important; filter: brightness(.76) saturate(1.12) contrast(1.03); }
   .academy-public-shell main article > img { filter: brightness(.68) saturate(1.28) contrast(1.08); transition: transform 700ms cubic-bezier(.23,1,.32,1), filter 300ms cubic-bezier(.23,1,.32,1); }
   .academy-public-shell main article:hover > img, .academy-public-shell main article:focus-within > img { filter: brightness(.78) saturate(1.28) contrast(1.06) drop-shadow(0 0 12px rgba(66,180,231,.34)); }
   .academy-public-shell .academy-surface, .academy-public-shell main article { transition: transform 220ms cubic-bezier(.23,1,.32,1), border-color 220ms cubic-bezier(.23,1,.32,1), box-shadow 220ms cubic-bezier(.23,1,.32,1); box-shadow: 0 0 0 1px rgba(66,180,231,.14), 0 18px 38px rgba(13,21,32,.15), inset 0 1px 0 rgba(197,240,255,.025); }

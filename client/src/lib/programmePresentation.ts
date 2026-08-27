@@ -1,6 +1,6 @@
 export type ProgrammeFocus = "all" | "business" | "technology";
 
-type ProgrammeLike = { slug?: string; title: string };
+type ProgrammeLike = { slug?: string; title: string; imageUrl?: string | null };
 
 type ProgrammePresentation = {
   focuses: Exclude<ProgrammeFocus, "all">[];
@@ -28,7 +28,8 @@ const fallbackPresentation: ProgrammePresentation = {
 };
 
 export function getProgrammePresentation(course: ProgrammeLike): ProgrammePresentation {
-  return programmePresentations[course.slug ?? ""] ?? fallbackPresentation;
+  const presentation = programmePresentations[course.slug ?? ""] ?? fallbackPresentation;
+  return course.imageUrl ? { ...presentation, image: course.imageUrl } : presentation;
 }
 
 export function courseMatchesFocus(course: ProgrammeLike, focus: ProgrammeFocus): boolean {

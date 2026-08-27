@@ -7,7 +7,7 @@ import { useAcademyAnalytics } from "@/hooks/useAcademyAnalytics";
 import { useTheme } from "@/contexts/ThemeContext";
 import { getProgrammePresentation } from "@/lib/programmePresentation";
 
-export type CatalogCourse = { id: number; slug?: string; title: string; description: string; duration: string; pricePence: number; paymentLink: string | null; featured: number };
+export type CatalogCourse = { id: number; slug?: string; title: string; description: string; duration: string; pricePence: number; paymentLink: string | null; imageUrl?: string | null; featured: number };
 export const formatPrice = (pricePence: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(pricePence / 100);
 
 export default function CourseCard({ course }: { course: CatalogCourse }) {

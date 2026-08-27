@@ -50,6 +50,20 @@
       "when": 1787860392414,
       "tag": "0006_lowly_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1787872410006,
+      "tag": "0007_silky_jocasta",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1787872455258,
+      "tag": "0008_bent_ironclad",
+      "breakpoints": true
     }
   ]
 }

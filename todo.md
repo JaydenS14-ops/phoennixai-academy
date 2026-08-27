@@ -181,3 +181,9 @@
 - [x] Make the Admin Management Centre logo return to the public homepage without adding a separate cluttered navigation button.
 - [x] Route secure Admin sign-out to the dedicated `/admin/login` portal after clearing the authenticated session.
 - [x] Add an understated public-home return link inside the Admin login card and validate logout plus return navigation.
+- [x] Add administrator-managed image URL overrides for individual programme cards with safe visual fallbacks.
+- [x] Add a responsive public compare-pathways selector for prospective learners.
+- [x] Lighten the public hero-image treatment across pages while preserving readable headline and control contrast.
+- [x] Show the most recent Admin sign-in timestamp in the protected dashboard.
+- [x] Add a branded login-page support contact link for administrators who need access assistance.
+- [x] Validate programme image management, comparison, lighter heroes, recent sign-in activity, login support, and responsive/protected flows before checkpointing.

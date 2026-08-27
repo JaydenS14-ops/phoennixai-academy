@@ -12,6 +12,7 @@ import { ENV } from "./_core/env";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import { academyRouter } from "./routers/academy";
+import { getLatestAdminSignIn, recordAdminSignIn } from "./db";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -42,6 +43,7 @@ export const appRouter = router({
           });
         }
         const token = await createAdminSessionToken();
+        await recordAdminSignIn();
         ctx.res.cookie(
           ADMIN_SESSION_COOKIE,
           token,
@@ -49,8 +51,9 @@ export const appRouter = router({
         );
         return { success: true } as const;
       }),
-    status: publicProcedure.query(({ ctx }) => ({
+    status: publicProcedure.query(async ({ ctx }) => ({
       authenticated: Boolean(ctx.adminSession),
+      latestSignIn: ctx.adminSession ? await getLatestAdminSignIn() : null,
     })),
     logout: publicProcedure.mutation(({ ctx }) => {
       ctx.res.clearCookie(ADMIN_SESSION_COOKIE, {

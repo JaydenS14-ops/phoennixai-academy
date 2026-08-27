@@ -33,6 +33,8 @@ export const courses = mysqlTable("courses", {
   duration: varchar("duration", { length: 64 }).notNull(),
   pricePence: int("pricePence").notNull(),
   paymentLink: text("paymentLink"),
+  imageKey: varchar("imageKey", { length: 512 }),
+  imageUrl: text("imageUrl"),
   featured: int("featured").notNull().default(0),
   sortOrder: int("sortOrder").notNull().default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -77,6 +79,11 @@ export const analyticsEvents = mysqlTable("analytics_events", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+export const adminSignIns = mysqlTable("admin_sign_ins", {
+  id: int("id").autoincrement().primaryKey(),
+  occurredAt: timestamp("occurredAt").defaultNow().notNull(),
+});
+
 export const academyEvents = mysqlTable("academy_events", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 180 }).notNull(),
@@ -108,3 +115,4 @@ export type StudentLead = typeof studentLeads.$inferSelect;
 export type AcademyEvent = typeof academyEvents.$inferSelect;
 export type ArchiveMoment = typeof archiveMoments.$inferSelect;
 export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;
+export type AdminSignIn = typeof adminSignIns.$inferSelect;
