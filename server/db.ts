@@ -356,6 +356,12 @@ export async function recordAnalyticsEvent(input: AnalyticsEventInput) {
   await db.insert(analyticsEvents).values({ ...input, pathway: input.pathway || null, detail: input.detail || null });
 }
 
+export async function resetAnalyticsTelemetry() {
+  const db = await ensureAcademyDefaults();
+  await db.delete(analyticsEvents);
+  await db.delete(pageViews);
+}
+
 function withinRange(value: Date, start?: Date, end?: Date) { return (!start || value >= start) && (!end || value <= end); }
 function dayKey(value: Date) { return value.toISOString().slice(0, 10); }
 function percentage(part: number, whole: number) { return whole ? Number(((part / whole) * 100).toFixed(1)) : 0; }

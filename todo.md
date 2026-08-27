@@ -141,3 +141,7 @@
 - [x] Intensify the shared public fantasy lighting with controlled blue illumination while retaining content legibility.
 - [x] Add luminous, accessible hover and focus states to public cards and buttons.
 - [x] Validate the responsive navigation and lighting interactions across desktop, tablet, mobile, light, dark, and reduced-motion views before checkpointing.
+- [x] Add an Admin-only, typed-confirmation reset for anonymous analytics events that never affects student leads or CMS data.
+- [x] Add a darker, readable fantasy overlay treatment to every public hero image.
+- [x] Apply the intensified luminous overlay and hover treatment to approved In Motion archive imagery.
+- [x] Validate protected reset boundaries and responsive public visual treatments before checkpointing.

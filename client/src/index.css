@@ -161,6 +161,9 @@
   .academy-public-shell main > .container { position: relative; isolation: isolate; }
   .academy-public-shell main > .container::before { content: ""; pointer-events: none; position: absolute; inset: -2rem -1rem; z-index: 0; background: radial-gradient(28rem 25rem at 94% 14%, rgba(66,180,231,.18), transparent 72%), radial-gradient(22rem 22rem at 3% 76%, rgba(171,169,68,.12), transparent 72%); animation: ambient-shimmer 9s ease-in-out infinite alternate; }
   .academy-public-shell main > .container > * { position: relative; z-index: 1; }
+  .academy-public-shell .academy-hero-image { opacity: .22 !important; filter: brightness(.62) saturate(1.22) contrast(1.08); }
+  .academy-public-shell main article > img { filter: brightness(.68) saturate(1.28) contrast(1.08); transition: transform 700ms cubic-bezier(.23,1,.32,1), filter 300ms cubic-bezier(.23,1,.32,1); }
+  .academy-public-shell main article:hover > img, .academy-public-shell main article:focus-within > img { filter: brightness(.84) saturate(1.42) contrast(1.08) drop-shadow(0 0 16px rgba(66,180,231,.52)); }
   .academy-public-shell .academy-surface, .academy-public-shell main article { transition: transform 220ms cubic-bezier(.23,1,.32,1), border-color 220ms cubic-bezier(.23,1,.32,1), box-shadow 220ms cubic-bezier(.23,1,.32,1); box-shadow: 0 0 0 1px rgba(66,180,231,.12), 0 16px 36px rgba(13,21,32,.12); }
   .academy-public-shell .academy-surface:hover, .academy-public-shell .academy-surface:focus-within, .academy-public-shell main article:hover, .academy-public-shell main article:focus-within { transform: translateY(-3px); border-color: rgba(66,180,231,.68) !important; box-shadow: 0 0 0 1px rgba(168,230,255,.38), 0 0 20px rgba(66,180,231,.24), 0 0 52px rgba(66,180,231,.16), 0 20px 42px rgba(1,7,14,.28); }
   .dark .academy-public-shell .academy-surface { box-shadow: 0 0 0 1px rgba(66,180,231,.24), 0 18px 48px rgba(0,0,0,.26), inset 0 1px 0 rgba(197,240,255,.06); }

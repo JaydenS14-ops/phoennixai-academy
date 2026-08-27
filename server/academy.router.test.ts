@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   getAdminArchiveMoments: vi.fn(),
   getAdminAnalytics: vi.fn().mockResolvedValue({ metrics: {}, dailyTrend: [], acquisition: [], ctaPerformance: [], funnel: [], fieldDropOff: [], pathwayPopularity: [], activity: [], exportRows: [] }),
   recordAnalyticsEvent: vi.fn(),
+  resetAnalyticsTelemetry: vi.fn(),
   storagePut: vi.fn().mockResolvedValue({ key: "academy-archive/real-moment.jpg", url: "/manus-storage/academy-archive/real-moment.jpg" }),
   updateArchiveMoment: vi.fn(),
   updateAcademyCourse: vi.fn(),
@@ -32,6 +33,7 @@ vi.mock("./db", () => ({
   getAdminOverview: vi.fn(),
   recordPageView: vi.fn(),
   recordAnalyticsEvent: mocks.recordAnalyticsEvent,
+  resetAnalyticsTelemetry: mocks.resetAnalyticsTelemetry,
   updateAcademyContent: mocks.updateAcademyContent,
   updateArchiveMoment: mocks.updateArchiveMoment,
   updateAcademyCourse: mocks.updateAcademyCourse,
@@ -154,5 +156,13 @@ describe("academy intake and administration contracts", () => {
     const filters = { startDate: "2026-08-01", endDate: "2026-08-31", pathway: "AI Automation", source: "social" as const };
     await admin.admin.analytics(filters);
     expect(mocks.getAdminAnalytics).toHaveBeenCalledWith(filters);
+  });
+
+  it("requires an administrator session and exact confirmation before resetting anonymous telemetry", async () => {
+    await expect(academyRouter.createCaller(context()).admin.resetAnalytics({ confirmation: "RESET ANALYTICS" })).rejects.toMatchObject({ code: "FORBIDDEN" });
+    const admin = academyRouter.createCaller(context(true));
+    await expect(admin.admin.resetAnalytics({ confirmation: "reset analytics" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await admin.admin.resetAnalytics({ confirmation: "RESET ANALYTICS" });
+    expect(mocks.resetAnalyticsTelemetry).toHaveBeenCalledTimes(1);
   });
 });

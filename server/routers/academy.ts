@@ -13,6 +13,7 @@ import {
   getAdminOverview,
   recordPageView,
   recordAnalyticsEvent,
+  resetAnalyticsTelemetry,
   updateArchiveMoment,
   updateAcademyContent,
   updateAcademyCourse,
@@ -74,6 +75,7 @@ export const academyRouter = router({
   admin: router({
     overview: adminProcedure.query(() => getAdminOverview()),
     analytics: adminProcedure.input(analyticsFilterInput).query(({ input }) => getAdminAnalytics(input)),
+    resetAnalytics: adminProcedure.input(z.object({ confirmation: z.literal("RESET ANALYTICS") })).mutation(() => resetAnalyticsTelemetry()),
     createCourse: adminProcedure
       .input(z.object({
         title: z.string().trim().min(2).max(180),
