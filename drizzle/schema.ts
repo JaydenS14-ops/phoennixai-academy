@@ -48,6 +48,7 @@ export const siteContent = mysqlTable("site_content", {
 
 export const studentLeads = mysqlTable("student_leads", {
   id: int("id").autoincrement().primaryKey(),
+  applicantType: varchar("applicantType", { length: 48 }).notNull().default("parent_guardian"),
   parentName: varchar("parentName", { length: 160 }).notNull(),
   parentEmail: varchar("parentEmail", { length: 320 }).notNull(),
   studentName: varchar("studentName", { length: 160 }).notNull(),

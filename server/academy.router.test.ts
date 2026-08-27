@@ -52,12 +52,26 @@ function context(adminSession = false): TrpcContext {
 describe("academy intake and administration contracts", () => {
   it("validates Prep School age before accepting an intake", async () => {
     const caller = academyRouter.createCaller(context());
-    await expect(caller.submitLead({ parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 7, primarySkill: "Software Computing", availability: "Wednesday afternoons" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+    await expect(caller.submitLead({ applicantType: "parent_guardian", parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 7, primarySkill: "Software Computing", availability: "Wednesday afternoons" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
 
   it("passes a validated intake to the student-lead persistence helper", async () => {
     const caller = academyRouter.createCaller(context());
-    const lead = { parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 12, primarySkill: "Software Computing", availability: "Wednesday afternoons and Saturday mornings" };
+    const lead = { applicantType: "parent_guardian" as const, parentName: "Valerie Wilcox", parentEmail: "valerie@example.com", studentName: "Learner One", studentAge: 12, primarySkill: "Software Computing", availability: "Wednesday afternoons and Saturday mornings" };
+    await caller.submitLead(lead);
+    expect(mocks.createStudentLead).toHaveBeenCalledWith(lead);
+  });
+
+  it("accepts an adult learner enquiry without parent-only framing", async () => {
+    const caller = academyRouter.createCaller(context());
+    const lead = { applicantType: "adult_learner" as const, parentName: "Jordan Blake", parentEmail: "jordan@example.com", studentName: "Jordan Blake", studentAge: 28, primarySkill: "AI Automation", availability: "Evenings and Saturdays" };
+    await caller.submitLead(lead);
+    expect(mocks.createStudentLead).toHaveBeenCalledWith(lead);
+  });
+
+  it("accepts an Agency work-experience enquiry from age 14", async () => {
+    const caller = academyRouter.createCaller(context());
+    const lead = { applicantType: "work_experience" as const, parentName: "Casey Morgan", parentEmail: "casey@example.com", studentName: "Casey Morgan", studentAge: 15, primarySkill: "Work Experience with PhoennixAI Agency", availability: "School holidays and Friday afternoons" };
     await caller.submitLead(lead);
     expect(mocks.createStudentLead).toHaveBeenCalledWith(lead);
   });

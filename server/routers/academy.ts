@@ -20,12 +20,17 @@ import { answerAcademyQuestion } from "../academyChat";
 import { storagePut } from "../storage";
 
 const leadInput = z.object({
+  applicantType: z.enum(["parent_guardian", "adult_learner", "work_experience", "agency_apprenticeship"]),
   parentName: z.string().trim().min(2).max(160),
   parentEmail: z.string().trim().email().max(320),
   studentName: z.string().trim().min(2).max(160),
   studentAge: z.number().int().min(8).max(100),
   primarySkill: z.string().trim().min(2).max(160),
   availability: z.string().trim().min(8).max(2000),
+}).superRefine((lead, context) => {
+  if (lead.applicantType === "parent_guardian" && lead.studentAge < 8) context.addIssue({ code: "custom", path: ["studentAge"], message: "Prep School welcomes learners from age 8." });
+  if (lead.applicantType === "adult_learner" && lead.studentAge < 18) context.addIssue({ code: "custom", path: ["studentAge"], message: "Please choose the appropriate youth, work-experience, or apprenticeship route for applicants under 18." });
+  if ((lead.applicantType === "work_experience" || lead.applicantType === "agency_apprenticeship") && lead.studentAge < 14) context.addIssue({ code: "custom", path: ["studentAge"], message: "PhoennixAI Agency opportunity enquiries are available from age 14." });
 });
 
 const bentoSize = z.enum(["standard", "wide", "tall", "feature"]);

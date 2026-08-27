@@ -1,0 +1,1 @@
+ALTER TABLE `student_leads` ADD `applicantType` varchar(48) DEFAULT 'parent_guardian' NOT NULL;

@@ -83,3 +83,12 @@
 - [x] Browser-test authenticated course edits, confirmed course removal, archive image upload, archive publishing, and public archive refresh.
 - [x] Save a new checkpoint after the remaining CMS validation passes.
 - [x] Save a final checkpoint after the authenticated Admin CMS workflow is verified.
+- [x] Add public In Motion filters for Events, Alumni, Founders, and Retreats.
+- [x] Redesign the enquiry flow to support adult learners, parents and guardians, work-experience applicants, and PhoennixAI Agency apprenticeship applicants.
+- [x] Extend lead capture and protected Admin lead views to clearly identify the applicant pathway and relevant contact details.
+- [x] Audit and refine public landing-page conversion paths, navigation clarity, copy, edge cases, visual hierarchy, and calls to action.
+- [x] Repair the failed Innovation in Practice media asset and make the section’s intent clear to visitors.
+- [x] Validate responsive enquiry, filtering, landing-page, and media reliability improvements before saving a checkpoint.
+- [x] Update the protected Admin lead table to identify the applicant pathway and show appropriate contact labels on screen.
+- [x] Clarify the public Innovation in Practice section and its supporting studio image directly in the homepage experience.
+- [x] Revalidate the refreshed homepage and protected Admin lead presentation before saving the optimization checkpoint.

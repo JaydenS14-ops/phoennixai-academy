@@ -130,7 +130,7 @@ const academyContent = [
   { contentKey: "inmotion_intro", contentValue: "A living visual archive for alumni moments, founder gatherings, capital conversations, retreats, and the people building meaningful impact across technology and business." },
   { contentKey: "inmotion_status_label", contentValue: "Growing with the community" },
   { contentKey: "inmotion_status_heading", contentValue: "Every photograph will become a record of momentum." },
-  { contentKey: "inmotion_status_text", contentValue: "This archive is prepared for authentic community imagery. Publish approved Academy and partner moments through the protected Admin Management Centre." },
+  { contentKey: "inmotion_status_text", contentValue: "This archive is prepared for authentic community imagery. New approved moments are added as the Academy and its partners grow the community together." },
   { contentKey: "inmotion_section_label", contentValue: "Built for real moments" },
   { contentKey: "inmotion_section_heading", contentValue: "A bento archive that grows with the work." },
   { contentKey: "inmotion_section_text", contentValue: "The page accommodates event photography, short editorial captions, collaborator highlights, and evolving programmes without losing its clarity or sense of craft." },
@@ -179,6 +179,7 @@ export async function getAcademyCatalog() {
 }
 
 export async function createStudentLead(input: {
+  applicantType: "parent_guardian" | "adult_learner" | "work_experience" | "agency_apprenticeship";
   parentName: string;
   parentEmail: string;
   studentName: string;
