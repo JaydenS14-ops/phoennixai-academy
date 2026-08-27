@@ -148,3 +148,6 @@
 - [x] Refine the existing fantasy lighting to a subtler, more atmospheric treatment without adding scroll animation or changing the site structure.
 - [x] Preserve readable content contrast while improving blue glow pools, olive accents, illuminated edges, and visual depth.
 - [x] Validate the refined lighting across public desktop, mobile, light, dark, and reduced-motion views before checkpointing.
+- [x] Replace the homepage Family Bundle section image with an approved family-pathway visual.
+- [x] Add a soft cinematic glow to public navigation item hover and keyboard-focus states.
+- [x] Validate the Family Bundle visual and navigation glow across responsive public views before checkpointing.

@@ -12,7 +12,7 @@ import { useLiveCatalog } from "@/hooks/useLiveCatalog";
 
 const HERO_IMAGE = "/manus-storage/academy-studio-hero_8bd2bb43.jpg";
 const MANDATE_IMAGE = "/manus-storage/academy-mandate_4ca25858.jpg";
-const PROJECT_IMAGE = "/manus-storage/academy-project-learning_baf16fd7.jpg";
+const PROJECT_IMAGE = "/manus-storage/phoennixai-family-bundle_93e3b3a8.jpg";
 const INNOVATION_IMAGE = "/manus-storage/academy-innovation_05cc55e6.jpg";
 const EVENTS_IMAGE = "/manus-storage/academy-events-brochure_8e1c8429.jpg";
 
