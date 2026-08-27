@@ -5,6 +5,7 @@ describe("programme presentation", () => {
   it("assigns each standard programme a dedicated visual treatment", () => {
     expect(getProgrammePresentation({ slug: "product-design", title: "Product Design" }).image).toContain("programme-product-design");
     expect(getProgrammePresentation({ slug: "ai-automation", title: "AI Automation" }).label).toBe("Applied AI");
+    expect(getProgrammePresentation({ slug: "digital-marketing", title: "Digital Marketing" }).outline).toEqual(["Audience insight", "Campaign design", "Growth measurement"]);
   });
 
   it("filters programmes by their relevant business or technology focus", () => {

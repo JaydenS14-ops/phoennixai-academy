@@ -175,3 +175,6 @@
 - [x] Add visually distinct, programme-specific image treatments to the curriculum pathway cards without obscuring course information.
 - [x] Add accessible All, Business, and Technology filters to the public programme catalogue.
 - [x] Validate the Programme hero, programme-specific visual treatments, filtering, copy contrast, and responsive layout before checkpointing.
+- [x] Rename the Programmes submenu labels to “Explore courses” and “Curriculum framework” across the responsive navigation.
+- [x] Add concise, scannable course-outline previews to public programme cards without crowding pricing or enquiry actions.
+- [x] Validate updated Programme navigation labels and course-outline previews on desktop and mobile before checkpointing.
