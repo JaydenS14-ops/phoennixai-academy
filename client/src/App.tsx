@@ -35,7 +35,7 @@ function PublicRouteTracker() {
 
 function HomeWithCommunityHighlights() {
   const { data } = trpc.academy.catalog.useQuery(undefined, { refetchInterval: 15000 });
-  return <><Home /><CommunityHighlights events={data?.events ?? []} testimonials={data?.testimonials ?? []} /></>;
+  return <><Home /><CommunityHighlights testimonials={data?.testimonials ?? []} /></>;
 }
 
 function Router() {
