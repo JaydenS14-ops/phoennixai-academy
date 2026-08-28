@@ -205,3 +205,4 @@
 - [x] Add an empty-until-authentic public testimonial carousel and protected Admin testimonial create, edit, publish, and delete controls without fabricated reviews.
 - [x] Validate image distinction, archive and event highlights, cohort capture, testimonial safeguards, responsive public views, and protected Admin controls before checkpointing.
 - [x] Standardise desktop and mobile primary navigation labels in uppercase while preserving active states and accessible submenu behavior.
+- [x] Remove the latest published archive moment feature from In Motion while preserving archive filters and published-moment browsing.
