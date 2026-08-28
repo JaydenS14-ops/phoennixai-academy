@@ -195,3 +195,6 @@
 - [x] Update the Programme hero heading to “Programmes designed for builders.”
 - [x] Replace similar course-card imagery with distinct visual treatments for AI Automation, Product Design, Software Computing, Digital Marketing, and Gaming & Graphics.
 - [x] Validate concise login support copy, simplified catalogue content, distinct imagery, accessibility, and responsive presentation before checkpointing.
+- [x] Create and integrate an In Motion hero background that celebrates ongoing Academy memories, achievements, events, and builder community.
+- [x] Create and integrate a Rise to Capital hero background that conveys founder preparation, investment readiness, and strategic capital conversations.
+- [x] Validate both hero images, text-safe overlays, contrast, and responsive layouts before checkpointing.
