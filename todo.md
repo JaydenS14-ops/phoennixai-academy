@@ -204,3 +204,4 @@
 - [x] Add a partner-event highlights carousel that uses genuine published Academy event records.
 - [x] Add an empty-until-authentic public testimonial carousel and protected Admin testimonial create, edit, publish, and delete controls without fabricated reviews.
 - [x] Validate image distinction, archive and event highlights, cohort capture, testimonial safeguards, responsive public views, and protected Admin controls before checkpointing.
+- [x] Standardise desktop and mobile primary navigation labels in uppercase while preserving active states and accessible submenu behavior.
