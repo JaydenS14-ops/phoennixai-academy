@@ -12,7 +12,7 @@ import { useLiveCatalog } from "@/hooks/useLiveCatalog";
 
 const HERO_IMAGE = "/manus-storage/phoennixai-academy-hero_9e615f29.jpg";
 const MANDATE_IMAGE = "/manus-storage/phoennixai-mandate-leaders_c2451ab3.jpg";
-const PROJECT_IMAGE = "/manus-storage/phoennixai-family-bundle_93e3b3a8.jpg";
+const PROJECT_IMAGE = "/manus-storage/phoennixai-family-seasonal-creative_14169666.jpg";
 const INNOVATION_IMAGE = "/manus-storage/academy-innovation_05cc55e6.jpg";
 const EVENTS_IMAGE = "/manus-storage/phoennixai-events-gala_3a4c077a.jpg";
 

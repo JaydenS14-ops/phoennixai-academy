@@ -56,6 +56,7 @@ export const studentLeads = mysqlTable("student_leads", {
   studentName: varchar("studentName", { length: 160 }).notNull(),
   studentAge: int("studentAge").notNull(),
   primarySkill: varchar("primarySkill", { length: 160 }).notNull(),
+  cohortInterest: varchar("cohortInterest", { length: 160 }),
   availability: text("availability").notNull(),
   status: mysqlEnum("status", ["active", "spam"]).notNull().default("active"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -109,6 +110,18 @@ export const archiveMoments = mysqlTable("archive_moments", {
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
+export const testimonials = mysqlTable("testimonials", {
+  id: int("id").autoincrement().primaryKey(),
+  authorName: varchar("authorName", { length: 160 }).notNull(),
+  authorRole: varchar("authorRole", { length: 180 }).notNull(),
+  quote: text("quote").notNull(),
+  consentConfirmed: int("consentConfirmed").notNull().default(0),
+  published: int("published").notNull().default(0),
+  sortOrder: int("sortOrder").notNull().default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export type Course = typeof courses.$inferSelect;
 export type InsertCourse = typeof courses.$inferInsert;
 export type StudentLead = typeof studentLeads.$inferSelect;
@@ -116,3 +129,4 @@ export type AcademyEvent = typeof academyEvents.$inferSelect;
 export type ArchiveMoment = typeof archiveMoments.$inferSelect;
 export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;
 export type AdminSignIn = typeof adminSignIns.$inferSelect;
+export type Testimonial = typeof testimonials.$inferSelect;

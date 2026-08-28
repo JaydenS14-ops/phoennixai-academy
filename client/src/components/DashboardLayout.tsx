@@ -12,7 +12,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useState } from "react";
-import { BarChart3, CalendarDays, FileText, GraduationCap, ImagePlus, LayoutDashboard, Loader2, LogOut, Trash2, Upload } from "lucide-react";
+import { BarChart3, CalendarDays, FileText, GraduationCap, ImagePlus, LayoutDashboard, Loader2, LogOut, MessageSquareQuote, Trash2, Upload } from "lucide-react";
 import { Button } from "./ui/button";
 import AcademyAnalytics from "./AcademyAnalytics";
 import AnalyticsReset from "./AnalyticsReset";
@@ -28,6 +28,7 @@ const menuItems = [
   { icon: GraduationCap, label: "Course management", key: "courses" },
   { icon: CalendarDays, label: "Luma events", key: "events" },
   { icon: ImagePlus, label: "In Motion archive", key: "archive" },
+  { icon: MessageSquareQuote, label: "Testimonials", key: "testimonials" },
   { icon: FileText, label: "Site content", key: "content" },
 ];
 

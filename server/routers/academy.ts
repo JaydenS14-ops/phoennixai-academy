@@ -4,12 +4,14 @@ import {
   createAcademyEvent,
   createArchiveMoment,
   createStudentLead,
+  createTestimonial,
   deleteAcademyCourse,
   deleteArchiveMoment,
   deleteAcademyEvent,
   deleteStudentLead,
   deleteStudentLeads,
   getAdminLeadPage,
+  getAdminTestimonials,
   markStudentLeadSpam,
   markStudentLeadsSpam,
   restoreStudentLead,
@@ -25,6 +27,8 @@ import {
   updateAcademyContent,
   updateAcademyCourse,
   updateAcademyCourseImage,
+  updateTestimonial,
+  deleteTestimonial,
 } from "../db";
 import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { answerAcademyQuestion } from "../academyChat";
@@ -37,6 +41,7 @@ const leadInput = z.object({
   studentName: z.string().trim().min(2).max(160),
   studentAge: z.number().int().min(8).max(100),
   primarySkill: z.string().trim().min(2).max(160),
+  cohortInterest: z.string().trim().max(160).optional(),
   availability: z.string().trim().min(8).max(2000),
 }).superRefine((lead, context) => {
   if (lead.applicantType === "parent_guardian" && lead.studentAge < 8) context.addIssue({ code: "custom", path: ["studentAge"], message: "Prep School welcomes learners from age 8." });
@@ -65,6 +70,13 @@ const analyticsFilterInput = z.object({
   endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   pathway: z.string().max(160).optional(),
   source: z.enum(["all", "direct", "organic", "social", "referral", "campaign", "other"]).optional(),
+});
+const testimonialInput = z.object({
+  authorName: z.string().trim().min(2).max(160),
+  authorRole: z.string().trim().min(2).max(180),
+  quote: z.string().trim().min(12).max(2000),
+  consentConfirmed: z.boolean(),
+  published: z.boolean(),
 });
 
 function archiveFileExtension(mimeType: z.infer<typeof imageMimeType>) {
@@ -148,6 +160,10 @@ export const academyRouter = router({
     deleteEvent: adminProcedure
       .input(z.object({ id: z.number().int().positive() }))
       .mutation(({ input }) => deleteAcademyEvent(input.id)),
+    testimonials: adminProcedure.query(() => getAdminTestimonials()),
+    createTestimonial: adminProcedure.input(testimonialInput).mutation(({ input }) => createTestimonial(input)),
+    updateTestimonial: adminProcedure.input(testimonialInput.extend({ id: z.number().int().positive() })).mutation(({ input }) => updateTestimonial(input)),
+    deleteTestimonial: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteTestimonial(input.id)),
     archiveMoments: adminProcedure.query(() => getAdminArchiveMoments()),
     createArchiveMoment: adminProcedure
       .input(z.object({

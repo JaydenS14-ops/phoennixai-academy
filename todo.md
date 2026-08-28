@@ -198,3 +198,9 @@
 - [x] Create and integrate an In Motion hero background that celebrates ongoing Academy memories, achievements, events, and builder community.
 - [x] Create and integrate a Rise to Capital hero background that conveys founder preparation, investment readiness, and strategic capital conversations.
 - [x] Validate both hero images, text-safe overlays, contrast, and responsive layouts before checkpointing.
+- [x] Replace the Family Bundle supporting image with a visually distinct seasonal learning scene.
+- [x] Add a featured latest archive moment section below the In Motion hero using authentic published archive content only.
+- [x] Add an optional Rise to Capital cohort-interest field to the enquiry flow and protected lead records.
+- [x] Add a partner-event highlights carousel that uses genuine published Academy event records.
+- [x] Add an empty-until-authentic public testimonial carousel and protected Admin testimonial create, edit, publish, and delete controls without fabricated reviews.
+- [x] Validate image distinction, archive and event highlights, cohort capture, testimonial safeguards, responsive public views, and protected Admin controls before checkpointing.

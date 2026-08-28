@@ -16,6 +16,7 @@ import InMotion from "./pages/InMotion";
 import { trpc } from "./lib/trpc";
 import { useAcademyAnalytics } from "./hooks/useAcademyAnalytics";
 import AcademyFooter from "./components/AcademyFooter";
+import CommunityHighlights from "./components/CommunityHighlights";
 
 function PublicRouteTracker() {
   const [location] = useLocation();
@@ -32,11 +33,16 @@ function PublicRouteTracker() {
   return null;
 }
 
+function HomeWithCommunityHighlights() {
+  const { data } = trpc.academy.catalog.useQuery(undefined, { refetchInterval: 15000 });
+  return <><Home /><CommunityHighlights events={data?.events ?? []} testimonials={data?.testimonials ?? []} /></>;
+}
+
 function Router() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith("/admin");
   return <><PublicRouteTracker /><div className={isAdminRoute ? undefined : "academy-public-shell"}><Switch>
-    <Route path="/" component={Home} />
+    <Route path="/" component={HomeWithCommunityHighlights} />
     <Route path="/courses" component={CourseCatalog} />
     <Route path="/apply" component={Intake} />
     <Route path="/admin/login" component={AdminLogin} />

@@ -10,6 +10,7 @@ import {
   pageViews,
   siteContent,
   studentLeads,
+  testimonials,
   users,
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -167,17 +168,19 @@ async function ensureAcademyDefaults() {
 
 export async function getAcademyCatalog() {
   const db = await ensureAcademyDefaults();
-  const [courseList, contentList, eventList, archiveList] = await Promise.all([
+  const [courseList, contentList, eventList, archiveList, testimonialList] = await Promise.all([
     db.select().from(courses).orderBy(asc(courses.sortOrder)),
     db.select().from(siteContent),
     db.select().from(academyEvents).orderBy(desc(academyEvents.createdAt)),
     db.select().from(archiveMoments).where(eq(archiveMoments.published, 1)).orderBy(asc(archiveMoments.sortOrder), desc(archiveMoments.createdAt)),
+    db.select().from(testimonials).where(and(eq(testimonials.published, 1), eq(testimonials.consentConfirmed, 1))).orderBy(asc(testimonials.sortOrder), desc(testimonials.createdAt)),
   ]);
   return {
     courses: courseList,
     content: Object.fromEntries(contentList.map(item => [item.contentKey, item.contentValue])),
     events: eventList,
     archiveMoments: archiveList,
+    testimonials: testimonialList,
   };
 }
 
@@ -188,6 +191,7 @@ export async function createStudentLead(input: {
   studentName: string;
   studentAge: number;
   primarySkill: string;
+  cohortInterest?: string | null;
   availability: string;
 }) {
   const db = await ensureAcademyDefaults();
@@ -372,6 +376,29 @@ export async function createAcademyEvent(input: {
 export async function deleteAcademyEvent(id: number) {
   const db = await ensureAcademyDefaults();
   await db.delete(academyEvents).where(eq(academyEvents.id, id));
+}
+
+export async function getAdminTestimonials() {
+  const db = await ensureAcademyDefaults();
+  return db.select().from(testimonials).orderBy(asc(testimonials.sortOrder), desc(testimonials.createdAt));
+}
+
+export async function createTestimonial(input: { authorName: string; authorRole: string; quote: string; consentConfirmed: boolean; published: boolean }) {
+  if (input.published && !input.consentConfirmed) throw new Error("Confirm the contributor’s permission before publishing a testimonial.");
+  const db = await ensureAcademyDefaults();
+  const [lastTestimonial] = await db.select({ sortOrder: testimonials.sortOrder }).from(testimonials).orderBy(desc(testimonials.sortOrder)).limit(1);
+  await db.insert(testimonials).values({ ...input, consentConfirmed: input.consentConfirmed ? 1 : 0, published: input.published ? 1 : 0, sortOrder: (lastTestimonial?.sortOrder ?? -1) + 1 });
+}
+
+export async function updateTestimonial(input: { id: number; authorName: string; authorRole: string; quote: string; consentConfirmed: boolean; published: boolean }) {
+  if (input.published && !input.consentConfirmed) throw new Error("Confirm the contributor’s permission before publishing a testimonial.");
+  const db = await ensureAcademyDefaults();
+  await db.update(testimonials).set({ authorName: input.authorName, authorRole: input.authorRole, quote: input.quote, consentConfirmed: input.consentConfirmed ? 1 : 0, published: input.published ? 1 : 0 }).where(eq(testimonials.id, input.id));
+}
+
+export async function deleteTestimonial(id: number) {
+  const db = await ensureAcademyDefaults();
+  await db.delete(testimonials).where(eq(testimonials.id, id));
 }
 
 export async function getAdminArchiveMoments() {

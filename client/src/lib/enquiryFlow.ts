@@ -1,6 +1,6 @@
 export type ApplicantType = "parent_guardian" | "adult_learner" | "work_experience" | "agency_apprenticeship";
 
-export type EnquiryFormState = { applicantType: ApplicantType; parentName: string; parentEmail: string; studentName: string; studentAge: string; primarySkill: string; availability: string };
+export type EnquiryFormState = { applicantType: ApplicantType; parentName: string; parentEmail: string; studentName: string; studentAge: string; primarySkill: string; cohortInterest: string; availability: string };
 type Labels = { contactName: string; personName: string; availability: string };
 
 export function minimumAge(type: ApplicantType) { return type === "parent_guardian" ? 8 : type === "adult_learner" ? 18 : 14; }
