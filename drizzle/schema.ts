@@ -85,6 +85,20 @@ export const adminSignIns = mysqlTable("admin_sign_ins", {
   occurredAt: timestamp("occurredAt").defaultNow().notNull(),
 });
 
+export const adminRecoveryTokens = mysqlTable("admin_recovery_tokens", {
+  id: int("id").autoincrement().primaryKey(),
+  tokenHash: varchar("tokenHash", { length: 64 }).notNull().unique(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  usedAt: timestamp("usedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const adminCredentialOverrides = mysqlTable("admin_credential_overrides", {
+  id: int("id").autoincrement().primaryKey(),
+  passwordHash: text("passwordHash").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
 export const academyEvents = mysqlTable("academy_events", {
   id: int("id").autoincrement().primaryKey(),
   title: varchar("title", { length: 180 }).notNull(),
@@ -129,4 +143,6 @@ export type AcademyEvent = typeof academyEvents.$inferSelect;
 export type ArchiveMoment = typeof archiveMoments.$inferSelect;
 export type AnalyticsEvent = typeof analyticsEvents.$inferSelect;
 export type AdminSignIn = typeof adminSignIns.$inferSelect;
+export type AdminRecoveryToken = typeof adminRecoveryTokens.$inferSelect;
+export type AdminCredentialOverride = typeof adminCredentialOverrides.$inferSelect;
 export type Testimonial = typeof testimonials.$inferSelect;

@@ -8,4 +8,7 @@ export const ENV = {
   forgeApiUrl: process.env.BUILT_IN_FORGE_API_URL ?? "",
   forgeApiKey: process.env.BUILT_IN_FORGE_API_KEY ?? "",
   revolutProPaymentLink: process.env.REVOLUT_PRO_PAYMENT_LINK ?? "",
+  resendApiKey: process.env.RESEND_API_KEY ?? "",
+  adminRecoveryEmail: process.env.ADMIN_RECOVERY_EMAIL ?? "",
+  adminRecoveryFromEmail: process.env.ADMIN_RECOVERY_FROM_EMAIL ?? "",
 };

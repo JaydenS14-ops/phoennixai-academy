@@ -219,3 +219,17 @@
 - [x] Add a safe, non-blocking account security notice after repeated failed Admin sign-in attempts.
 - [x] Provide device-specific bookmark instructions for `/admin/login` without storing personal device data.
 - [x] Validate repeated-failure feedback, input safety, responsive presentation, and existing Admin authentication before checkpointing.
+- [ ] Expand programme previews into clear topic, teaching, and learner-gain lists.
+- [ ] Add a secure Admin forgot-password and email recovery flow without exposing credential or account-existence details.
+- [ ] Add server-side rate limiting and safe repeated-failure handling for Admin login.
+- [ ] Add an enquiry-to-booking route after selecting a pathway, subject to the chosen scheduling approach.
+- [ ] Audit public, enquiry, payment-intent, mobile, and Admin journeys for high-impact drop-off friction and apply evidence-based fixes.
+- [ ] Add deterministic tests and responsive validation for the launch-readiness changes before checkpointing.
+- [ ] Implement secure email OTP password recovery: server-generated six-digit code, hashed storage, 15-minute expiry, single use, generic responses, and rate-limited requests.
+- [ ] Use the approved support-email recovery wording with a configurable sender and recovery-delivery provider, without hardcoding codes or credentials.
+- [ ] Keep the enquiry scheduling route pending until the user selects an external scheduler link or built-in callback request.
+- [x] Apply the `admin_credential_overrides` migration for persistent secure password recovery.
+- [x] Implement hashed, single-use six-digit email OTP recovery with 15-minute expiry and Resend delivery.
+- [x] Add server-side Admin login rate limiting and connect the Admin login portal to forgot-password and reset-password states.
+- [ ] Decide and implement the enquiry-to-booking scheduler path after confirming whether the team prefers an external booking link or a built-in callback workflow.
+- [ ] Complete the launch-readiness conversion and security audit, including scheduler friction checks.

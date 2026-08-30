@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
+import { checkAdminLoginRateLimit, clearAdminLoginFailures, getAdminRateLimitKey, hashAdminPassword, registerFailedAdminLogin, verifyAdminPassword } from "./adminAuth";
+import { createRecoveryCode, hashRecoveryCode } from "./adminRecovery";
 
 function createContext() {
   const cookies: Array<{ name: string; value: string }> = [];
@@ -17,6 +19,24 @@ function createContext() {
 }
 
 afterEach(() => vi.unstubAllEnvs());
+
+describe("admin security primitives", () => {
+  it("creates six-digit recovery codes and hashes them one-way", () => {
+    const code = createRecoveryCode();
+    expect(code).toMatch(/^\d{6}$/);
+    expect(hashRecoveryCode(code)).not.toContain(code);
+  });
+
+  it("verifies generated password hashes and throttles repeated failures", async () => {
+    const encoded = await hashAdminPassword("a-secure-password-123");
+    expect(await verifyAdminPassword("a-secure-password-123", encoded)).toBe(true);
+    expect(await verifyAdminPassword("wrong-password", encoded)).toBe(false);
+    const key = getAdminRateLimitKey("127.0.0.1", `rate-limit-${Date.now()}`);
+    for (let attempt = 0; attempt < 5; attempt += 1) registerFailedAdminLogin(key);
+    expect(checkAdminLoginRateLimit(key).allowed).toBe(false);
+    clearAdminLoginFailures(key);
+  });
+});
 
 describe("admin.login", () => {
   it("accepts the configured private credentials and issues an administrator session cookie", async () => {

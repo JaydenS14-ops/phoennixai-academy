@@ -1,6 +1,8 @@
 import { and, asc, count, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  adminCredentialOverrides,
+  adminRecoveryTokens,
   adminSignIns,
   academyEvents,
   analyticsEvents,
@@ -215,6 +217,43 @@ export async function getLatestAdminSignIn() {
   if (!db) return null;
   const [latest] = await db.select({ occurredAt: adminSignIns.occurredAt }).from(adminSignIns).orderBy(desc(adminSignIns.occurredAt)).limit(1);
   return latest?.occurredAt ?? null;
+}
+
+export async function getAdminPasswordHash() {
+  const db = await getDb();
+  if (!db) return null;
+  const [record] = await db.select({ passwordHash: adminCredentialOverrides.passwordHash }).from(adminCredentialOverrides).orderBy(desc(adminCredentialOverrides.updatedAt)).limit(1);
+  return record?.passwordHash ?? null;
+}
+
+export async function saveAdminPasswordHash(passwordHash: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  const [existing] = await db.select({ id: adminCredentialOverrides.id }).from(adminCredentialOverrides).limit(1);
+  if (existing) {
+    await db.update(adminCredentialOverrides).set({ passwordHash }).where(eq(adminCredentialOverrides.id, existing.id));
+  } else {
+    await db.insert(adminCredentialOverrides).values({ passwordHash });
+  }
+}
+
+export async function createAdminRecoveryToken(tokenHash: string, expiresAt: Date) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.insert(adminRecoveryTokens).values({ tokenHash, expiresAt });
+}
+
+export async function getAdminRecoveryToken(tokenHash: string) {
+  const db = await getDb();
+  if (!db) return null;
+  const [record] = await db.select().from(adminRecoveryTokens).where(eq(adminRecoveryTokens.tokenHash, tokenHash)).limit(1);
+  return record ?? null;
+}
+
+export async function markAdminRecoveryTokenUsed(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.update(adminRecoveryTokens).set({ usedAt: new Date() }).where(eq(adminRecoveryTokens.id, id));
 }
 
 export type AdminLeadStatus = "active" | "spam";

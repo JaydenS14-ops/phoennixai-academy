@@ -5,7 +5,11 @@ import {
   ADMIN_SESSION_COOKIE,
   createAdminSessionToken,
   getAdminCookieOptions,
-  validateAdminCredentials,
+  checkAdminLoginRateLimit,
+  clearAdminLoginFailures,
+  getAdminRateLimitKey,
+  registerFailedAdminLogin,
+  validateAdminCredentialsAsync,
 } from "./adminAuth";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { ENV } from "./_core/env";
@@ -13,6 +17,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, publicProcedure, router } from "./_core/trpc";
 import { academyRouter } from "./routers/academy";
 import { getLatestAdminSignIn, recordAdminSignIn } from "./db";
+import { requestAdminPasswordRecovery, resetAdminPassword } from "./adminRecovery";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -36,12 +41,18 @@ export const appRouter = router({
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        if (!validateAdminCredentials(input.username, input.password)) {
-          throw new TRPCError({
-            code: "UNAUTHORIZED",
-            message: "The username or password is incorrect.",
-          });
+        const forwardedFor = ctx.req.headers["x-forwarded-for"];
+        const ip = ctx.req.ip ?? (typeof forwardedFor === "string" ? forwardedFor.split(",")[0]?.trim() : undefined);
+        const rateLimitKey = getAdminRateLimitKey(ip, input.username);
+        const rateLimit = checkAdminLoginRateLimit(rateLimitKey);
+        if (!rateLimit.allowed) {
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many sign-in attempts. Please wait and try again later." });
         }
+        if (!(await validateAdminCredentialsAsync(input.username, input.password))) {
+          registerFailedAdminLogin(rateLimitKey);
+          throw new TRPCError({ code: "UNAUTHORIZED", message: "The username or password is incorrect." });
+        }
+        clearAdminLoginFailures(rateLimitKey);
         const token = await createAdminSessionToken();
         await recordAdminSignIn();
         ctx.res.cookie(
@@ -55,6 +66,20 @@ export const appRouter = router({
       authenticated: Boolean(ctx.adminSession),
       latestSignIn: ctx.adminSession ? await getLatestAdminSignIn() : null,
     })),
+    forgotPassword: publicProcedure
+      .input(z.object({ email: z.string().email().max(320) }))
+      .mutation(async ({ input }) => {
+        if (ENV.adminRecoveryEmail && input.email.trim().toLowerCase() === ENV.adminRecoveryEmail.trim().toLowerCase()) {
+          await requestAdminPasswordRecovery();
+        }
+        return { message: "If the account details are eligible, recovery instructions have been sent." } as const;
+      }),
+    resetPassword: publicProcedure
+      .input(z.object({ code: z.string().regex(/^\\d{6}$/), newPassword: z.string().min(12).max(512) }))
+      .mutation(async ({ input }) => {
+        await resetAdminPassword(input.code, input.newPassword);
+        return { success: true } as const;
+      }),
     logout: publicProcedure.mutation(({ ctx }) => {
       ctx.res.clearCookie(ADMIN_SESSION_COOKIE, {
         ...getAdminCookieOptions(ENV.isProduction),
