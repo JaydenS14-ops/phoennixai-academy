@@ -210,3 +210,4 @@
 - [x] Add compact pagination for larger published archive bento grids while preserving the editorial visual layout.
 - [x] Relocate the redundant partner-event highlights area from the homepage to In Motion, using genuine published event records only.
 - [x] Validate archive filtering, pagination, relocated event highlights, empty states, and responsive presentation before final checkpointing.
+- [x] Remove the Admin link from the client-facing public navigation while preserving secure direct access through `/admin/login` and protected `/admin`.
