@@ -17,6 +17,22 @@ import { trpc } from "./lib/trpc";
 import { useAcademyAnalytics } from "./hooks/useAcademyAnalytics";
 import AcademyFooter from "./components/AcademyFooter";
 import CommunityHighlights from "./components/CommunityHighlights";
+import { ADMIN_LOGIN_PATH } from "./lib/adminNavigation";
+import { isAdminShortcut } from "./lib/adminShortcut";
+
+function AdminShortcut() {
+  const [, setLocation] = useLocation();
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (!isAdminShortcut(event)) return;
+      event.preventDefault();
+      setLocation(ADMIN_LOGIN_PATH);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setLocation]);
+  return null;
+}
 
 function PublicRouteTracker() {
   const [location] = useLocation();
@@ -41,7 +57,7 @@ function HomeWithCommunityHighlights() {
 function Router() {
   const [location] = useLocation();
   const isAdminRoute = location.startsWith("/admin");
-  return <><PublicRouteTracker /><div className={isAdminRoute ? undefined : "academy-public-shell"}><Switch>
+  return <><AdminShortcut /><PublicRouteTracker /><div className={isAdminRoute ? undefined : "academy-public-shell"}><Switch>
     <Route path="/" component={HomeWithCommunityHighlights} />
     <Route path="/courses" component={CourseCatalog} />
     <Route path="/apply" component={Intake} />
