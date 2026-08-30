@@ -10,7 +10,13 @@ export const ADMIN_SESSION_COOKIE = "phoennix_admin_session";
 const SESSION_DURATION_SECONDS = 60 * 60 * 12;
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT_MAX_ATTEMPTS = 5;
+const RECOVERY_REQUEST_WINDOW_MS = 60 * 60 * 1000;
+const RECOVERY_REQUEST_MAX_ATTEMPTS = 3;
+const RECOVERY_RESET_WINDOW_MS = 15 * 60 * 1000;
+const RECOVERY_RESET_MAX_ATTEMPTS = 10;
 const failedLoginAttempts = new Map<string, { count: number; resetAt: number }>();
+const recoveryRequests = new Map<string, { count: number; resetAt: number }>();
+const recoveryResets = new Map<string, { count: number; resetAt: number }>();
 
 function getSigningKey() {
   const secret = process.env.JWT_SECRET;
@@ -84,6 +90,44 @@ export function registerFailedAdminLogin(key: string) {
 
 export function clearAdminLoginFailures(key: string) {
   failedLoginAttempts.delete(key);
+}
+
+function checkWindowedLimit(store: Map<string, { count: number; resetAt: number }>, key: string, windowMs: number, maxAttempts: number) {
+  const now = Date.now();
+  const current = store.get(key);
+  if (!current || current.resetAt <= now) {
+    store.set(key, { count: 0, resetAt: now + windowMs });
+    return { allowed: true, retryAfterSeconds: 0 };
+  }
+  return current.count >= maxAttempts
+    ? { allowed: false, retryAfterSeconds: Math.ceil((current.resetAt - now) / 1000) }
+    : { allowed: true, retryAfterSeconds: 0 };
+}
+
+function recordWindowedAttempt(store: Map<string, { count: number; resetAt: number }>, key: string, windowMs: number) {
+  const now = Date.now();
+  const current = store.get(key);
+  if (!current || current.resetAt <= now) {
+    store.set(key, { count: 1, resetAt: now + windowMs });
+  } else {
+    current.count += 1;
+  }
+}
+
+export function checkAdminRecoveryRequestRateLimit(key: string) {
+  return checkWindowedLimit(recoveryRequests, key, RECOVERY_REQUEST_WINDOW_MS, RECOVERY_REQUEST_MAX_ATTEMPTS);
+}
+
+export function registerAdminRecoveryRequest(key: string) {
+  recordWindowedAttempt(recoveryRequests, key, RECOVERY_REQUEST_WINDOW_MS);
+}
+
+export function checkAdminRecoveryResetRateLimit(key: string) {
+  return checkWindowedLimit(recoveryResets, key, RECOVERY_RESET_WINDOW_MS, RECOVERY_RESET_MAX_ATTEMPTS);
+}
+
+export function registerAdminRecoveryReset(key: string) {
+  recordWindowedAttempt(recoveryResets, key, RECOVERY_RESET_WINDOW_MS);
 }
 
 export async function createAdminSessionToken() {

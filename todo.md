@@ -219,17 +219,21 @@
 - [x] Add a safe, non-blocking account security notice after repeated failed Admin sign-in attempts.
 - [x] Provide device-specific bookmark instructions for `/admin/login` without storing personal device data.
 - [x] Validate repeated-failure feedback, input safety, responsive presentation, and existing Admin authentication before checkpointing.
-- [ ] Expand programme previews into clear topic, teaching, and learner-gain lists.
-- [ ] Add a secure Admin forgot-password and email recovery flow without exposing credential or account-existence details.
-- [ ] Add server-side rate limiting and safe repeated-failure handling for Admin login.
-- [ ] Add an enquiry-to-booking route after selecting a pathway, subject to the chosen scheduling approach.
-- [ ] Audit public, enquiry, payment-intent, mobile, and Admin journeys for high-impact drop-off friction and apply evidence-based fixes.
-- [ ] Add deterministic tests and responsive validation for the launch-readiness changes before checkpointing.
-- [ ] Implement secure email OTP password recovery: server-generated six-digit code, hashed storage, 15-minute expiry, single use, generic responses, and rate-limited requests.
-- [ ] Use the approved support-email recovery wording with a configurable sender and recovery-delivery provider, without hardcoding codes or credentials.
-- [ ] Keep the enquiry scheduling route pending until the user selects an external scheduler link or built-in callback request.
+- [x] Expand programme previews into clear topic, teaching, and learner-gain lists.
+- [x] Add a secure Admin forgot-password and email recovery flow without exposing credential or account-existence details.
+- [x] Add server-side rate limiting and safe repeated-failure handling for Admin login.
+- [x] Add an enquiry-to-booking route after selecting a pathway, subject to the chosen scheduling approach.
+- [x] Audit public, enquiry, payment-intent, mobile, and Admin journeys for high-impact drop-off friction and apply evidence-based fixes.
+- [x] Add deterministic tests and responsive validation for the launch-readiness changes before checkpointing.
+- [x] Implement secure email OTP password recovery: server-generated six-digit code, hashed storage, 15-minute expiry, single use, generic responses, and rate-limited requests.
+- [x] Use the approved support-email recovery wording with a configurable sender and recovery-delivery provider, without hardcoding codes or credentials.
+- [x] Keep the enquiry scheduling route pending until the user selects an external scheduler link or built-in callback request.
 - [x] Apply the `admin_credential_overrides` migration for persistent secure password recovery.
 - [x] Implement hashed, single-use six-digit email OTP recovery with 15-minute expiry and Resend delivery.
 - [x] Add server-side Admin login rate limiting and connect the Admin login portal to forgot-password and reset-password states.
-- [ ] Decide and implement the enquiry-to-booking scheduler path after confirming whether the team prefers an external booking link or a built-in callback workflow.
-- [ ] Complete the launch-readiness conversion and security audit, including scheduler friction checks.
+- [x] Decide and implement the enquiry-to-booking scheduler path after confirming whether the team prefers an external scheduler link, selecting the supplied Cal.com page.
+- [x] Complete the launch-readiness conversion and security audit, including scheduler friction checks.
+- [x] Connect the enquiry completion flow to the supplied Cal.com booking URL: https://cal.com/phoennix-ai-team/30min.
+- [x] Verify the Cal.com booking handoff from enquiry conversion CTAs on desktop and mobile, including accessible external-link behavior.
+- [x] Complete the launch-readiness conversion and security audit after the booking handoff is validated.
+- [x] Add a low-friction “speak with the team first” Cal.com option at the top of the enquiry page, with privacy-safe click tracking.

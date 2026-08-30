@@ -6,8 +6,12 @@ import {
   createAdminSessionToken,
   getAdminCookieOptions,
   checkAdminLoginRateLimit,
+  checkAdminRecoveryRequestRateLimit,
+  checkAdminRecoveryResetRateLimit,
   clearAdminLoginFailures,
   getAdminRateLimitKey,
+  registerAdminRecoveryRequest,
+  registerAdminRecoveryReset,
   registerFailedAdminLogin,
   validateAdminCredentialsAsync,
 } from "./adminAuth";
@@ -68,15 +72,29 @@ export const appRouter = router({
     })),
     forgotPassword: publicProcedure
       .input(z.object({ email: z.string().email().max(320) }))
-      .mutation(async ({ input }) => {
+      .mutation(async ({ ctx, input }) => {
+        const forwardedFor = ctx.req.headers["x-forwarded-for"];
+        const ip = ctx.req.ip ?? (typeof forwardedFor === "string" ? forwardedFor.split(",")[0]?.trim() : undefined) ?? "unknown";
+        const rateLimit = checkAdminRecoveryRequestRateLimit(ip);
+        if (!rateLimit.allowed) {
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many recovery requests. Please wait and try again later." });
+        }
+        registerAdminRecoveryRequest(ip);
         if (ENV.adminRecoveryEmail && input.email.trim().toLowerCase() === ENV.adminRecoveryEmail.trim().toLowerCase()) {
           await requestAdminPasswordRecovery();
         }
         return { message: "If the account details are eligible, recovery instructions have been sent." } as const;
       }),
     resetPassword: publicProcedure
-      .input(z.object({ code: z.string().regex(/^\\d{6}$/), newPassword: z.string().min(12).max(512) }))
-      .mutation(async ({ input }) => {
+      .input(z.object({ code: z.string().regex(/^\d{6}$/), newPassword: z.string().min(12).max(512) }))
+      .mutation(async ({ ctx, input }) => {
+        const forwardedFor = ctx.req.headers["x-forwarded-for"];
+        const ip = ctx.req.ip ?? (typeof forwardedFor === "string" ? forwardedFor.split(",")[0]?.trim() : undefined) ?? "unknown";
+        const rateLimit = checkAdminRecoveryResetRateLimit(ip);
+        if (!rateLimit.allowed) {
+          throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: "Too many reset attempts. Please wait and try again later." });
+        }
+        registerAdminRecoveryReset(ip);
         await resetAdminPassword(input.code, input.newPassword);
         return { success: true } as const;
       }),

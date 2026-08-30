@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
-import { checkAdminLoginRateLimit, clearAdminLoginFailures, getAdminRateLimitKey, hashAdminPassword, registerFailedAdminLogin, verifyAdminPassword } from "./adminAuth";
+import { checkAdminLoginRateLimit, checkAdminRecoveryRequestRateLimit, checkAdminRecoveryResetRateLimit, clearAdminLoginFailures, getAdminRateLimitKey, hashAdminPassword, registerAdminRecoveryRequest, registerAdminRecoveryReset, registerFailedAdminLogin, verifyAdminPassword } from "./adminAuth";
 import { createRecoveryCode, hashRecoveryCode } from "./adminRecovery";
 
 function createContext() {
@@ -35,6 +35,12 @@ describe("admin security primitives", () => {
     for (let attempt = 0; attempt < 5; attempt += 1) registerFailedAdminLogin(key);
     expect(checkAdminLoginRateLimit(key).allowed).toBe(false);
     clearAdminLoginFailures(key);
+    const recoveryKey = `recovery-${Date.now()}`;
+    for (let attempt = 0; attempt < 3; attempt += 1) registerAdminRecoveryRequest(recoveryKey);
+    expect(checkAdminRecoveryRequestRateLimit(recoveryKey).allowed).toBe(false);
+    const resetKey = `reset-${Date.now()}`;
+    for (let attempt = 0; attempt < 10; attempt += 1) registerAdminRecoveryReset(resetKey);
+    expect(checkAdminRecoveryResetRateLimit(resetKey).allowed).toBe(false);
   });
 });
 
