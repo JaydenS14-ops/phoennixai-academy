@@ -202,3 +202,14 @@
   @keyframes partner-drift { to { transform: translateX(calc(-50% - .375rem)); } }
   @media (prefers-reduced-motion: reduce) { .orbital, .reveal, .reveal-delay, .reveal-delay-2, .partner-rail, .academy-public-shell main > section::before, .academy-public-shell main > .container::before { animation: none; opacity: 1; transform: none; } .academy-public-shell .academy-surface, .academy-public-shell main article, .academy-public-shell :is(main button, main a.inline-flex, header button, header a.inline-flex) { transition: none; } }
 }
+
+@keyframes admin-login-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-login-card { animation: admin-login-fade-in 420ms cubic-bezier(.23,1,.32,1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-login-card { animation: none; }
+}

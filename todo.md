@@ -212,3 +212,6 @@
 - [x] Validate archive filtering, pagination, relocated event highlights, empty states, and responsive presentation before final checkpointing.
 - [x] Remove the Admin link from the client-facing public navigation while preserving secure direct access through `/admin/login` and protected `/admin`.
 - [x] Add a guarded Ctrl+Shift+A shortcut to open `/admin/login` without interfering with editable fields.
+- [x] Add a smooth reduced-motion-aware fade-in animation to the Admin login portal.
+- [x] Add clear accessible error-state feedback for incorrect Admin credentials without exposing security-sensitive details.
+- [x] Validate login error recovery, responsive layout, and reduced-motion behavior before checkpointing.
