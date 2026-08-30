@@ -215,3 +215,7 @@
 - [x] Add a smooth reduced-motion-aware fade-in animation to the Admin login portal.
 - [x] Add clear accessible error-state feedback for incorrect Admin credentials without exposing security-sensitive details.
 - [x] Validate login error recovery, responsive layout, and reduced-motion behavior before checkpointing.
+- [x] Document the Ctrl+Shift+A Admin-login shortcut in private project guidance without exposing it in public navigation.
+- [x] Add a safe, non-blocking account security notice after repeated failed Admin sign-in attempts.
+- [x] Provide device-specific bookmark instructions for `/admin/login` without storing personal device data.
+- [x] Validate repeated-failure feedback, input safety, responsive presentation, and existing Admin authentication before checkpointing.

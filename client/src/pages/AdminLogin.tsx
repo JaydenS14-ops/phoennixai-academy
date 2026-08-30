@@ -14,6 +14,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
   const status = trpc.admin.status.useQuery();
   const catalog = trpc.academy.catalog.useQuery();
   const supportEmail = catalog.data?.content.footer_email ?? "info@phoennixai.com";
@@ -21,11 +22,13 @@ export default function AdminLogin() {
     onSuccess: async () => {
       await status.refetch();
       setLoginError(false);
+      setFailedAttempts(0);
       toast.success("Admin session started.");
       setLocation(ADMIN_HOME_PATH);
     },
     onError: () => {
       setLoginError(true);
+      setFailedAttempts(current => current + 1);
       toast.error("We could not verify those credentials. Please try again.");
     },
   });
@@ -43,6 +46,7 @@ export default function AdminLogin() {
       <h1 className="mt-3 font-display text-5xl font-bold leading-none tracking-wide">Admin Management Centre</h1>
       <p className="mt-4 font-body leading-7 text-[#EFF0EA]">Use your private administrator credentials to manage programmes, events, archive moments, public copy, and enquiries.</p>
       {loginError ? <div role="alert" aria-live="assertive" className="mt-5 flex items-start gap-3 rounded-md border border-[#E17575]/55 bg-[#E17575]/12 p-3 text-left"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-[#FFB1B1]" /><p className="font-body text-sm leading-6 text-[#FFE2E2]">We could not verify those credentials. Check your username and password, then try again.</p></div> : null}
+      {failedAttempts >= 3 ? <p role="status" aria-live="polite" className="mt-3 rounded-md border border-[#C9C877]/30 bg-[#ABA944]/10 px-3 py-2 font-body text-xs leading-5 text-[#F2EFB8]">For security, pause and check your details carefully before trying again. If you need help, contact support.</p> : null}
       <div className="mt-7 space-y-4">
         <div><Label htmlFor="adminUsername" className="font-body text-[#EFF0EA]">Username</Label><Input id="adminUsername" autoComplete="username" value={username} onChange={event => { setUsername(event.target.value); setLoginError(false); }} className="mt-2 border-white/15 bg-white/8 text-white" /></div>
         <div><Label htmlFor="adminPassword" className="font-body text-[#EFF0EA]">Password</Label><div className="relative mt-2"><Input id="adminPassword" type={showPassword ? "text" : "password"} autoComplete="current-password" value={password} onChange={event => { setPassword(event.target.value); setLoginError(false); }} className="border-white/15 bg-white/8 pr-12 text-white" /><button type="button" onClick={() => setShowPassword(current => !current)} aria-label={showPassword ? "Hide password" : "Show password"} aria-pressed={showPassword} className="absolute inset-y-0 right-0 grid w-11 place-items-center rounded-r-md text-[#C5F0FF] hover:text-[#C9C877]">{showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}</button></div></div>
