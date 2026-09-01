@@ -110,6 +110,17 @@ describe("academy intake and administration contracts", () => {
     expect(mocks.updateAcademyCourse).toHaveBeenCalledWith(update);
   });
 
+  it("passes a validated sort mode to the protected real-lead page", async () => {
+    const caller = academyRouter.createCaller(context(true));
+    await caller.admin.leadPage({ status: "active", sort: "contact_az", page: 1, pageSize: 10 });
+    expect(mocks.getAdminLeadPage).toHaveBeenCalledWith(expect.objectContaining({ sort: "contact_az" }));
+  });
+
+  it("rejects unsupported lead sort modes before querying records", async () => {
+    const caller = academyRouter.createCaller(context(true));
+    await expect(caller.admin.leadPage({ status: "active", sort: "unsafe_column" as never, page: 1, pageSize: 10 })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
   it("stores a programme image through protected storage before linking the override", async () => {
     const caller = academyRouter.createCaller(context(true));
     await caller.admin.updateCourseImage({ id: 1, fileName: "product-design.jpg", imageBase64: "a".repeat(160), imageMimeType: "image/jpeg" });
@@ -201,7 +212,7 @@ describe("academy intake and administration contracts", () => {
     const admin = academyRouter.createCaller(context(true));
     const filters = { search: "Valerie", fromDate: "2026-08-01", toDate: "2026-08-31", status: "spam" as const, page: 2, pageSize: 20 };
     await admin.admin.leadPage(filters);
-    expect(mocks.getAdminLeadPage).toHaveBeenCalledWith(filters);
+    expect(mocks.getAdminLeadPage).toHaveBeenCalledWith({ ...filters, sort: "newest" });
   });
 
   it("keeps spam marking and restore operations Admin-only and bounded", async () => {

@@ -237,3 +237,9 @@
 - [x] Verify the Cal.com booking handoff from enquiry conversion CTAs on desktop and mobile, including accessible external-link behavior.
 - [x] Complete the launch-readiness conversion and security audit after the booking handoff is validated.
 - [x] Add a low-friction “speak with the team first” Cal.com option at the top of the enquiry page, with privacy-safe click tracking.
+- [x] Add a loading spinner or skeleton while the Cal.com booking destination initializes.
+- [x] Add a smooth post-enquiry transition and success toast before the booking action is shown.
+- [x] Add Admin lead filtering and sorting using real saved lead records, with clear empty and loading states.
+- [x] Add a secure Admin Management Centre link to the public footer for mobile access.
+- [x] Add a discreet, accessible mobile long-press gesture on the footer brand mark as an optional Admin-login shortcut, without relying on hidden gestures alone.
+- [x] Add deterministic tests and responsive visual validation for the booking, lead-management, and Admin-access changes.

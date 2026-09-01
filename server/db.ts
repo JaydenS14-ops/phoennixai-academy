@@ -257,7 +257,8 @@ export async function markAdminRecoveryTokenUsed(id: number) {
 }
 
 export type AdminLeadStatus = "active" | "spam";
-export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; page?: number; pageSize?: number };
+export type AdminLeadSort = "newest" | "oldest" | "contact_az" | "interest_az";
+export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; sort?: AdminLeadSort; page?: number; pageSize?: number };
 
 function leadConditions(input: AdminLeadFilters = {}) {
   const conditions = [eq(studentLeads.status, input.status ?? "active")];
@@ -269,6 +270,13 @@ function leadConditions(input: AdminLeadFilters = {}) {
   if (input.fromDate) conditions.push(gte(studentLeads.createdAt, new Date(`${input.fromDate}T00:00:00.000Z`)));
   if (input.toDate) conditions.push(lte(studentLeads.createdAt, new Date(`${input.toDate}T23:59:59.999Z`)));
   return and(...conditions);
+}
+
+function leadOrder(input: AdminLeadFilters = {}) {
+  if (input.sort === "oldest") return asc(studentLeads.createdAt);
+  if (input.sort === "contact_az") return asc(studentLeads.parentName);
+  if (input.sort === "interest_az") return asc(studentLeads.primarySkill);
+  return desc(studentLeads.createdAt);
 }
 
 export async function deleteStudentLead(id: number) {
@@ -311,7 +319,7 @@ export async function getAdminLeadPage(input: AdminLeadFilters = {}) {
   const where = leadConditions(input);
   const [[totalRow], leadRows] = await Promise.all([
     db.select({ total: count() }).from(studentLeads).where(where),
-    db.select().from(studentLeads).where(where).orderBy(desc(studentLeads.createdAt)).limit(pageSize).offset((page - 1) * pageSize),
+    db.select().from(studentLeads).where(where).orderBy(leadOrder(input)).limit(pageSize).offset((page - 1) * pageSize),
   ]);
   const total = Number(totalRow?.total ?? 0);
   return { leads: leadRows, total, page, pageSize, totalPages: Math.max(Math.ceil(total / pageSize), 1) };

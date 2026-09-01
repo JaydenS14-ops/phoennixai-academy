@@ -13,6 +13,7 @@ import AdminLogin from "./pages/AdminLogin";
 import RiseToCapital from "./pages/RiseToCapital";
 import Curriculum from "./pages/Curriculum";
 import InMotion from "./pages/InMotion";
+import Booking from "./pages/Booking";
 import { trpc } from "./lib/trpc";
 import { useAcademyAnalytics } from "./hooks/useAcademyAnalytics";
 import AcademyFooter from "./components/AcademyFooter";
@@ -61,6 +62,7 @@ function Router() {
     <Route path="/" component={HomeWithCommunityHighlights} />
     <Route path="/courses" component={CourseCatalog} />
     <Route path="/apply" component={Intake} />
+    <Route path="/book" component={Booking} />
     <Route path="/admin/login" component={AdminLogin} />
     <Route path="/admin" component={AdminAccessGate} />
     <Route path="/rise-to-capital" component={RiseToCapital} />
