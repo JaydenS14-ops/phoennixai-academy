@@ -243,3 +243,7 @@
 - [x] Add a secure Admin Management Centre link to the public footer for mobile access.
 - [x] Add a discreet, accessible mobile long-press gesture on the footer brand mark as an optional Admin-login shortcut, without relying on hidden gestures alone.
 - [x] Add deterministic tests and responsive visual validation for the booking, lead-management, and Admin-access changes.
+- [x] Correct light and dark booking-page contrast so headings, body copy, helper text, and the return-to-enquiry action remain clearly visible.
+- [x] Add globally consistent, useful name and email placeholders to enquiry fields for parent, adult, work-experience, and apprenticeship pathways.
+- [x] Add a protected lead-status lifecycle with Admin-controlled follow-up states, real-record filtering, and visible labels in the lead workspace.
+- [x] Add schema migration, procedure validation, automated tests, and responsive visual checks for the contrast, input, and lead-status changes.

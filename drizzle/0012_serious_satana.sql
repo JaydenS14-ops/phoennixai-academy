@@ -1,0 +1,1 @@
+ALTER TABLE `student_leads` ADD `followUpStatus` enum('new','contacted','booked','enrolled','closed') DEFAULT 'new' NOT NULL;

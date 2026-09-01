@@ -16,6 +16,7 @@ import {
   markStudentLeadsSpam,
   restoreStudentLead,
   restoreStudentLeads,
+  updateStudentLeadFollowUpStatus,
   getAdminArchiveMoments,
   getAdminAnalytics,
   getAcademyCatalog,
@@ -100,13 +101,14 @@ export const academyRouter = router({
     .mutation(async ({ input }) => ({ answer: await answerAcademyQuestion(input.question) })),
   admin: router({
     overview: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), fromDate: z.string().date().optional(), toDate: z.string().date().optional(), status: z.enum(["active", "spam"]).default("active"), page: z.number().int().positive().default(1), pageSize: z.number().int().min(1).max(50).default(10) })).query(({ input }) => getAdminOverview(input)),
-    leadPage: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), fromDate: z.string().date().optional(), toDate: z.string().date().optional(), status: z.enum(["active", "spam"]).default("active"), sort: z.enum(["newest", "oldest", "contact_az", "interest_az"]).default("newest"), page: z.number().int().positive().default(1), pageSize: z.number().int().min(1).max(50).default(10) })).query(({ input }) => getAdminLeadPage(input)),
+    leadPage: adminProcedure.input(z.object({ search: z.string().trim().max(160).optional(), fromDate: z.string().date().optional(), toDate: z.string().date().optional(), status: z.enum(["active", "spam"]).default("active"), followUpStatus: z.enum(["new", "contacted", "booked", "enrolled", "closed"]).optional(), sort: z.enum(["newest", "oldest", "contact_az", "interest_az"]).default("newest"), page: z.number().int().positive().default(1), pageSize: z.number().int().min(1).max(50).default(10) })).query(({ input }) => getAdminLeadPage(input)),
     deleteLead: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => deleteStudentLead(input.id)),
     deleteLeads: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => deleteStudentLeads(Array.from(new Set(input.ids)))),
     markLeadSpam: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => markStudentLeadSpam(input.id)),
     markLeadsSpam: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => markStudentLeadsSpam(Array.from(new Set(input.ids)))),
     restoreLead: adminProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => restoreStudentLead(input.id)),
     restoreLeads: adminProcedure.input(z.object({ ids: z.array(z.number().int().positive()).min(1).max(100) })).mutation(({ input }) => restoreStudentLeads(Array.from(new Set(input.ids)))),
+    updateLeadFollowUpStatus: adminProcedure.input(z.object({ id: z.number().int().positive(), followUpStatus: z.enum(["new", "contacted", "booked", "enrolled", "closed"]) })).mutation(({ input }) => updateStudentLeadFollowUpStatus(input.id, input.followUpStatus)),
     analytics: adminProcedure.input(analyticsFilterInput).query(({ input }) => getAdminAnalytics(input)),
     resetAnalytics: adminProcedure.input(z.object({ confirmation: z.literal("RESET ANALYTICS") })).mutation(() => resetAnalyticsTelemetry()),
     createCourse: adminProcedure

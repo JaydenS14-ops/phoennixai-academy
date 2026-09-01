@@ -59,6 +59,7 @@ export const studentLeads = mysqlTable("student_leads", {
   cohortInterest: varchar("cohortInterest", { length: 160 }),
   availability: text("availability").notNull(),
   status: mysqlEnum("status", ["active", "spam"]).notNull().default("active"),
+  followUpStatus: mysqlEnum("followUpStatus", ["new", "contacted", "booked", "enrolled", "closed"]).notNull().default("new"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

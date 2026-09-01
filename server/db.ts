@@ -258,7 +258,8 @@ export async function markAdminRecoveryTokenUsed(id: number) {
 
 export type AdminLeadStatus = "active" | "spam";
 export type AdminLeadSort = "newest" | "oldest" | "contact_az" | "interest_az";
-export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; sort?: AdminLeadSort; page?: number; pageSize?: number };
+export type AdminFollowUpStatus = "new" | "contacted" | "booked" | "enrolled" | "closed";
+export type AdminLeadFilters = { search?: string; fromDate?: string; toDate?: string; status?: AdminLeadStatus; followUpStatus?: AdminFollowUpStatus; sort?: AdminLeadSort; page?: number; pageSize?: number };
 
 function leadConditions(input: AdminLeadFilters = {}) {
   const conditions = [eq(studentLeads.status, input.status ?? "active")];
@@ -269,6 +270,7 @@ function leadConditions(input: AdminLeadFilters = {}) {
   }
   if (input.fromDate) conditions.push(gte(studentLeads.createdAt, new Date(`${input.fromDate}T00:00:00.000Z`)));
   if (input.toDate) conditions.push(lte(studentLeads.createdAt, new Date(`${input.toDate}T23:59:59.999Z`)));
+  if (input.followUpStatus) conditions.push(eq(studentLeads.followUpStatus, input.followUpStatus));
   return and(...conditions);
 }
 
@@ -310,6 +312,11 @@ export async function restoreStudentLeads(ids: number[]) {
   if (!ids.length) return;
   const db = await ensureAcademyDefaults();
   await db.update(studentLeads).set({ status: "active" }).where(inArray(studentLeads.id, ids));
+}
+
+export async function updateStudentLeadFollowUpStatus(id: number, followUpStatus: AdminFollowUpStatus) {
+  const db = await ensureAcademyDefaults();
+  await db.update(studentLeads).set({ followUpStatus }).where(eq(studentLeads.id, id));
 }
 
 export async function getAdminLeadPage(input: AdminLeadFilters = {}) {
