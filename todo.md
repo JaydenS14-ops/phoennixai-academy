@@ -254,8 +254,11 @@
 - [x] Validate the corrected testimonial and enquiry conversion actions on desktop and mobile before publishing.
 - [x] Add a concise privacy notice link directly below the final Submit enquiry action.
 - [x] Add and validate an accessible public privacy-notice destination for enquiry data handling.
-- [ ] Enable the authorised GitHub and Vercel integrations for the repository and deployment workflow.
-- [ ] Initialize the academy project’s Git repository and create a JaydenS14-ops code mirror without linking it to Vercel.
-- [ ] Create an identical Phoenix AI GitHub repository mirror under valerie-github1 from the same academy commit.
-- [ ] Link only the valerie-github1 Phoenix AI GitHub repository to Vercel account phoennixai-4316 and deploy the Academy production build.
-- [ ] Verify both repository mirrors and the Vercel deployment URL, then record the operational handoff.
+- [x] Enable the authorised GitHub and Vercel integrations for the repository and deployment workflow.
+- [x] Initialize the academy project’s Git repository and create a JaydenS14-ops code mirror without linking it to Vercel.
+- [ ] Create an identical Phoenix AI GitHub repository mirror under valerie-github1 from the same academy commit. Paused at the user’s request.
+- [ ] Link only the valerie-github1 Phoenix AI GitHub repository to Vercel account phoennixai-4316 and deploy the Academy production build. Paused at the user’s request.
+- [ ] Deploy only the private JaydenS14-ops/phoennixai-academy repository through Vercel and verify the production URL.
+- [ ] Record the final JaydenS14-ops repository and Vercel deployment handoff.
+- [ ] Add a Vercel-compatible API adapter and SPA rewrite configuration while preserving the existing managed deployment runtime.
+- [ ] Configure the required production environment variables in the target Vercel project without exposing secret values.
