@@ -252,3 +252,5 @@
 - [x] Correct the “Experiences shared with permission.” testimonial heading contrast in light appearance.
 - [x] Make the final enquiry-step Submit enquiry action visible, clearly labelled, and easy to reach.
 - [x] Validate the corrected testimonial and enquiry conversion actions on desktop and mobile before publishing.
+- [x] Add a concise privacy notice link directly below the final Submit enquiry action.
+- [x] Add and validate an accessible public privacy-notice destination for enquiry data handling.
