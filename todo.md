@@ -256,6 +256,6 @@
 - [x] Add and validate an accessible public privacy-notice destination for enquiry data handling.
 - [ ] Enable the authorised GitHub and Vercel integrations for the repository and deployment workflow.
 - [ ] Initialize the academy project’s Git repository and create a JaydenS14-ops code mirror without linking it to Vercel.
-- [ ] Create an identical Phoenix AI GitHub repository mirror from the same academy commit.
-- [ ] Link only the Phoenix AI GitHub repository to Vercel and deploy the Academy production build.
+- [ ] Create an identical Phoenix AI GitHub repository mirror under valerie-github1 from the same academy commit.
+- [ ] Link only the valerie-github1 Phoenix AI GitHub repository to Vercel account phoennixai-4316 and deploy the Academy production build.
 - [ ] Verify both repository mirrors and the Vercel deployment URL, then record the operational handoff.
