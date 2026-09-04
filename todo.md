@@ -249,3 +249,6 @@
 - [x] Add schema migration, procedure validation, automated tests, and responsive visual checks for the contrast, input, and lead-status changes.
 - [x] Increase the Full name and name@example.com watermark contrast in all dark enquiry contact fields, including focused and unfocused states.
 - [x] Revalidate the corrected contact-field watermarks on desktop and mobile before publishing.
+- [x] Correct the “Experiences shared with permission.” testimonial heading contrast in light appearance.
+- [x] Make the final enquiry-step Submit enquiry action visible, clearly labelled, and easy to reach.
+- [x] Validate the corrected testimonial and enquiry conversion actions on desktop and mobile before publishing.
