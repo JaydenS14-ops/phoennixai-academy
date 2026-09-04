@@ -247,3 +247,5 @@
 - [x] Add globally consistent, useful name and email placeholders to enquiry fields for parent, adult, work-experience, and apprenticeship pathways.
 - [x] Add a protected lead-status lifecycle with Admin-controlled follow-up states, real-record filtering, and visible labels in the lead workspace.
 - [x] Add schema migration, procedure validation, automated tests, and responsive visual checks for the contrast, input, and lead-status changes.
+- [x] Increase the Full name and name@example.com watermark contrast in all dark enquiry contact fields, including focused and unfocused states.
+- [x] Revalidate the corrected contact-field watermarks on desktop and mobile before publishing.
